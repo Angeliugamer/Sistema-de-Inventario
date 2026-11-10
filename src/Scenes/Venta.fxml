@@ -18,7 +18,7 @@
             </ImageView>
             <ImageView fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../Images/Shared/2%20L;ista%20Productos/Coso%20Astetic.png" />
+                  <Image url="@../../Images/Shared/2%20Lista%20Productos/Coso%20Astetic.png" />
                </image>
             </ImageView>
          </children>
