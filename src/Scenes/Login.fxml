@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane fx:id="Fondo">
+         <children>
+            <ImageView fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../Images/Shared/1%20Login/Fondo.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="124.0" fitWidth="2410.0" layoutX="1.0" pickOnBounds="true" preserveRatio="true" scaleY="-1.0">
+               <image>
+                  <Image url="@../../Images/Shared/1%20Login/Picos.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="124.0" fitWidth="2410.0" layoutX="-1130.0" layoutY="597.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../Images/Shared/1%20Login/Picos.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Pane>
+      <Pane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <ImageView fx:id="UsserBoxImg" fitHeight="48.0" fitWidth="391.0" layoutX="769.0" layoutY="330.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../Images/Shared/1%20Login/Cuadro%20Vacio.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="AddresBoxImg" fitHeight="48.0" fitWidth="391.0" layoutX="770.0" layoutY="441.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../Images/Shared/1%20Login/Cuadro%20Vacio.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="265.0" layoutY="210.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../Images/Icons/Image.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="96.0" fitWidth="108.0" layoutX="924.0" layoutY="150.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../Images/Icons/UserCircle.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="48.0" fitWidth="38.0" layoutX="1113.0" layoutY="446.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../Images/Icons/EyeClosed.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="48.0" fitWidth="38.0" layoutX="1113.0" layoutY="446.0" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@../../Images/Icons/Eye.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Pane>
+      <Pane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <Label layoutX="892.0" layoutY="230.0" text="Login">
+               <font>
+                  <Font name="Arial" size="64.0" />
+               </font>
+            </Label>
+            <Label layoutX="185.0" layoutY="366.0" prefWidth="330.0" text="no se que poner aqui acbksjbksjbvksjbvksvjbskj bsjk vbsjvbskbvskjb ksjbcvksbcvk jsbvksjbv kjsbcvkjsbvkjsbkvjbsjv" wrapText="true">
+               <font>
+                  <Font name="Arial" size="16.0" />
+               </font>
+            </Label>
+            <TextField fx:id="UsserField" layoutX="775.0" layoutY="335.0" prefHeight="38.0" prefWidth="380.0" style="-fx-background-color: transparent; -fx-border-color: transparent;" />
+            <TextField fx:id="AddresField" layoutX="775.0" layoutY="447.0" prefHeight="38.0" prefWidth="330.0" style="-fx-background-color: transparent; -fx-border-color: transparent;" />
+            <Label layoutX="773.0" layoutY="300.0" text="Usuario">
+               <font>
+                  <Font name="Arial" size="24.0" />
+               </font>
+            </Label>
+            <Label layoutX="773.0" layoutY="410.0" text="Contraseña">
+               <font>
+                  <Font name="Arial" size="24.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+   </children>
+</StackPane>

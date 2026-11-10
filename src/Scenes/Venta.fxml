@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.effect.ColorAdjust?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <ImageView fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../Images/Shared/1%20Login/Fondo.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../Images/Shared/2%20L;ista%20Productos/Coso%20Astetic.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Pane>
+      <Pane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <ImageView fitHeight="56.0" fitWidth="57.0" layoutX="23.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../Images/Icons/SignOut.png" />
+               </image>
+               <effect>
+                  <ColorAdjust brightness="1.0" />
+               </effect>
+            </ImageView>
+            <ImageView fitHeight="60.0" fitWidth="63.0" layoutX="1108.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../Images/Icons/ShoppingCart.png" />
+               </image>
+               <effect>
+                  <ColorAdjust brightness="1.0" />
+               </effect>
+            </ImageView>
+            <ImageView fitHeight="96.0" fitWidth="96.0" layoutX="1182.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../Images/Icons/UserCircle.png" />
+               </image>
+               <effect>
+                  <ColorAdjust brightness="1.0" />
+               </effect>
+            </ImageView>
+         </children>
+      </Pane>
+      <Pane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <Button fx:id="Out" layoutX="25.0" layoutY="22.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="52.0" style="-fx-background-color: transparent;" />
+            <Button fx:id="Shop" layoutX="1108.0" layoutY="26.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="60.0" style="-fx-background-color: transparent;" />
+            <Button fx:id="Usser" layoutX="1189.0" layoutY="14.0" mnemonicParsing="false" prefHeight="79.0" prefWidth="82.0" style="-fx-background-color: transparent;" />
+         </children>
+      </Pane>
+      <Pane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <ImageView fitHeight="446.0" fitWidth="762.0" layoutX="60.0" layoutY="132.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../Images/Shared/3%20Venta/Prod%201.png" />
+               </image>
+            </ImageView>
+            <ImageView accessibleRole="DECREMENT_BUTTON" fitHeight="446.0" fitWidth="762.0" layoutX="60.0" layoutY="283.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../Images/Shared/3%20Venta/Prod%202.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="446.0" fitWidth="762.0" layoutX="60.0" layoutY="428.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../Images/Shared/3%20Venta/Prod%203.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="446.0" fitWidth="762.0" layoutX="60.0" layoutY="132.0" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@../../Images/Shared/3%20Venta/Prod%20solo.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Pane>
+      <Pane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <ImageView fitHeight="249.0" fitWidth="398.0" layoutX="867.0" layoutY="154.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../Images/Shared/3%20Venta/No%20lo%20se%20hermano%20dimelo%20tu.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="881.0" layoutY="173.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../Images/Shared/3%20Venta/Text.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="56.0" fitWidth="327.0" layoutX="887.0" layoutY="335.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../Images/Shared/3%20Venta/Boton%20Continuar.png" />
+               </image>
+            </ImageView>
+            <Button layoutX="887.0" layoutY="335.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="327.0" style="-fx-background-color: transparent;" />
+         </children></Pane>
+   </children>
+</StackPane>
