@@ -1,0 +1,34 @@
+Sistema Inventario/
+│
+├── src/
+│   ├── Main.java
+│   │
+│   ├── Controllers/
+│   │   ├── ListProductController.java
+│   │   ├── LoginController.java
+│   │   └── VentaController.java
+│   │
+│   ├── Models/
+│   │   ├── User.java
+│   │   └── Purchase.java
+│   │
+│   ├── Services/
+│   │   ├── UserService.java
+│   │   ├── PurchaseService.java
+│   │   ├── JsonStorage.java
+│   │   └── Session.java
+│   │
+│   └── Scenes/
+│       ├── ListProduct.fxml
+│       ├── Login.fxml
+│       └── Venta.fxml
+│
+├── Images/
+│   ├── Shared/
+│   └── Icons/
+│
+├── Sonidos/
+│
+└── data/                 (se creará automáticamente)
+    ├── users.json
+    └── purchases.json
