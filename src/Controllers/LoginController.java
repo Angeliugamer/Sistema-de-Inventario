@@ -1,6 +1,5 @@
 package Controllers;
 
-import Main.MainApp;
 import Models.User;
 import Services.Session;
 import Services.UserService;
@@ -135,12 +134,23 @@ public class LoginController {
         Session.login(user);
 
         try {
-            MainApp.showInventory();
+            AppNavigator.showInventory();
 
         } catch (Exception e) {
             Session.logout();
             e.printStackTrace();
             showError("No se pudo abrir el inventario.");
+        }
+    }
+
+    @FXML
+    private void goToRegister() {
+        try {
+            AppNavigator.showRegister();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("No se pudo abrir el registro.");
         }
     }
 

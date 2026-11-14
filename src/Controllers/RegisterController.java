@@ -1,8 +1,5 @@
 package Controllers;
 
-import Main.MainApp;
-import Models.User;
-import Services.Session;
 import Services.UserService;
 
 import javafx.animation.Animation;
@@ -46,12 +43,12 @@ public class RegisterController {
 
         // Sincronizar los campos de contraseña
         AddresField.textProperty().addListener(
-                (observable, oldValue, newValue) ->
+                (obs, oldValue, newValue) ->
                         PasswordVisibleField.setText(newValue)
         );
 
         PasswordVisibleField.textProperty().addListener(
-                (observable, oldValue, newValue) -> {
+                (obs, oldValue, newValue) -> {
                     if (!newValue.equals(AddresField.getText())) {
                         AddresField.setText(newValue);
                     }
@@ -111,64 +108,64 @@ public class RegisterController {
 
     @FXML
     private void register() {
-        TextInputDialog usernameDialog = new TextInputDialog();
+        String username = UsserField.getText().trim();
 
-        usernameDialog.setTitle("Registro");
-        usernameDialog.setHeaderText("Crear una cuenta");
-        usernameDialog.setContentText("Nombre de usuario:");
+        String password = passwordVisible
+                ? PasswordVisibleField.getText()
+                : AddresField.getText();
 
-        Optional<String> username = usernameDialog.showAndWait();
-
-        if (username.isEmpty() || username.get().isBlank()) {
+        if (username.isEmpty() || password.isEmpty()) {
+            showError("Completa todos los campos.");
             return;
         }
 
-        Dialog<String> passwordDialog = new Dialog<>();
-
-        passwordDialog.setTitle("Registro");
-        passwordDialog.setHeaderText("Introduce una contraseña");
-
-        PasswordField passwordInput = new PasswordField();
-        passwordInput.setPromptText("Contraseña");
-
-        passwordDialog.getDialogPane().setContent(
-                passwordInput
-        );
-
-        passwordDialog.getDialogPane()
-                .getButtonTypes()
-                .addAll(ButtonType.OK, ButtonType.CANCEL);
-
-        passwordDialog.setResultConverter(button ->
-                button == ButtonType.OK
-                        ? passwordInput.getText()
-                        : null
-        );
-
-        Optional<String> password = passwordDialog.showAndWait();
-
-        if (password.isEmpty() || password.get().isBlank()) {
+        if (password.length() < 6) {
+            showError("La contraseña debe tener al menos 6 caracteres.");
             return;
         }
 
         boolean registered = UserService.register(
-                username.get(),
-                password.get()
+                username, password
         );
 
         if (registered) {
-            new Alert(Alert.AlertType.INFORMATION,
-                    "Usuario registrado correctamente.").showAndWait();
-            UsserField.setText(username.get());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+
+            alert.setTitle("Registro");
+            alert.setHeaderText("¡Cuenta creada!");
+            alert.setContentText("El usuario se registró correctamente.");
+
+            alert.showAndWait();
+
+            try {
+                AppNavigator.showLogin();
+            } catch (Exception e) {
+                e.printStackTrace();
+                showError("No se pudo regresar al Login.");
+            }
 
         } else {
             showError(
-                    "El usuario ya existe o los datos no son válidos."
+                    "El usuario ya existe o ocurrió un error."
             );
         }
     }
 
+    // REGRESAR AL LOGIN
+
+    @FXML
+    private void backToLogin() {
+        try {
+            AppNavigator.showLogin();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("No se pudo abrir el Login.");
+        }
+    }
+
     private void showError(String message) {
+
         ErrorLabel.setText(message);
         ErrorLabel.setVisible(true);
         ErrorLabel.setManaged(true);

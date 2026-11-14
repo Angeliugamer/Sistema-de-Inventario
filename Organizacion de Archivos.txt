@@ -4,24 +4,33 @@ Sistema Inventario/
 │   ├── Main.java
 │   │
 │   ├── Controllers/
+│   │   ├── AppNavigator.java
 │   │   ├── ListProductController.java
 │   │   ├── LoginController.java
+│   │   ├── RegisterController.java
 │   │   └── VentaController.java
 │   │
+│   ├── Interfaces/
+│   │   ├── Identificable.java
+│   │   ├── Gestionable.java
+│   │   └── Criterio.java
+│   │
 │   ├── Models/
-│   │   ├── User.java
-│   │   └── Purchase.java
+│   │   ├── Product.java
+│   │   ├── Purchase.java
+│   │   └── User.java
 │   │
-│   ├── Services/
-│   │   ├── UserService.java
-│   │   ├── PurchaseService.java
-│   │   ├── JsonStorage.java
-│   │   └── Session.java
+│   ├── Scenes/
+│   │   ├── ListProduct.fxml
+│   │   ├── Login.fxml
+│   │   ├── Register.fxml
+│   │   └── Venta.fxml
 │   │
-│   └── Scenes/
-│       ├── ListProduct.fxml
-│       ├── Login.fxml
-│       └── Venta.fxml
+│   └── Services/
+│       ├── JsonStorage.java
+│       ├── PurchaseService.java
+│       ├── Session.java
+│       └── UserService.java
 │
 ├── Images/
 │   ├── Shared/
@@ -30,5 +39,7 @@ Sistema Inventario/
 ├── Sonidos/
 │
 └── data/                 (se creará automáticamente)
-    ├── users.json
-    └── purchases.json
+    ├── Admins/
+    ├── Vende/
+    └── Registro/
+        └── DD-MM-AA.json (asi deben estar numerados)

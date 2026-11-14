@@ -1,3 +1,4 @@
+import Controllers.AppNavigator;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -24,7 +25,14 @@ public class Main extends Application {
         //     System.out.println(compra.getDate());
         // }
 
-        // Aquí cargas tu interfaz FXML
+        AppNavigator.setStage(stage);
+
+        stage.setTitle("Sistema Inventario");
+        stage.setResizable(false);
+
+        AppNavigator.showLogin();
+
+        stage.show();
     }
 
     public static void main(String[] args) {
