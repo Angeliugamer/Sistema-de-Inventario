@@ -59,7 +59,6 @@ public class LoginController {
     }
 
     // ANIMACIONES (porfavor no lo quiten)
-
     private void animatePicos() {
         // Superior: derecha a izquierda
         TranslateTransition superior =
@@ -88,7 +87,6 @@ public class LoginController {
     }
 
     // MOSTRAR / OCULTAR CONTRASEÑA
-
     @FXML
     private void togglePasswordVisibility() {
         passwordVisible = !passwordVisible;
@@ -107,7 +105,6 @@ public class LoginController {
     }
 
     // INICIAR SESIÓN
-
     @FXML
     private void login() {
         String username = UsserField.getText().trim();
@@ -134,23 +131,21 @@ public class LoginController {
         Session.login(user);
 
         try {
-            AppNavigator.showInventory();
+            /*
+             * Por ahora ambos roles llegan al inventario existente.
+             * Cuando diseñemos el panel de administración,
+             * cambiaremos aquí la navegación de los administradores.
+             */
+            if (Session.isAdmin()) {
+                AppNavigator.showInventory();
+            } else {
+                AppNavigator.showInventory();
+            }
 
         } catch (Exception e) {
             Session.logout();
             e.printStackTrace();
             showError("No se pudo abrir el inventario.");
-        }
-    }
-
-    @FXML
-    private void goToRegister() {
-        try {
-            AppNavigator.showRegister();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            showError("No se pudo abrir el registro.");
         }
     }
 
