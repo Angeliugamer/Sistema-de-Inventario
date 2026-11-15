@@ -1,7 +1,8 @@
 package Controllers;
 
-import Services.UserService;
 import Services.Session;
+import Services.UserService;
+import Services.ButtonSound;
 
 import javafx.animation.Animation;
 import javafx.animation.Interpolator;
@@ -138,6 +139,8 @@ public class RegisterController {
     // REGISTRAR USUARIO
     @FXML
     private void register() {
+        ButtonSound.playClick();
+
         if (!Session.isAdmin()) {
             showResult(
                     Alert.AlertType.ERROR,
@@ -211,6 +214,8 @@ public class RegisterController {
     // REGRESAR AL LOGIN
     @FXML
     private void backToLogin() {
+        ButtonSound.playClick();
+
         try {
             AppNavigator.showLogin();
 

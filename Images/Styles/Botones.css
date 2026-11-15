@@ -1,0 +1,24 @@
+/* ESTILO BASE */
+.boton-naranja {
+    -fx-background-color: #C5652F;
+    -fx-border-color: black;
+    -fx-border-width: 3px;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+
+    -fx-cursor: hand;
+}
+
+/* CUANDO EL MOUSE ESTÁ ENCIMA */
+.boton-naranja:hover {
+    -fx-background-color: #D48A40;
+}
+
+/* MIENTRAS SE MANTIENE PRESIONADO */
+.boton-naranja:pressed {
+    -fx-background-color: #A00A06;
+}

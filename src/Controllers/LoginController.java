@@ -3,6 +3,7 @@ package Controllers;
 import Models.User;
 import Services.Session;
 import Services.UserService;
+import Services.ButtonSound;
 
 import javafx.animation.Animation;
 import javafx.animation.Interpolator;
@@ -139,6 +140,8 @@ public class LoginController {
     // INICIAR SESIÓN
     @FXML
     private void login() {
+        ButtonSound.playClick();
+
         String username = UsserField.getText().trim();
 
         String password = passwordVisible
