@@ -4,6 +4,7 @@ import Services.UserService;
 import Services.Session;
 
 import javafx.animation.Animation;
+import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -64,7 +65,8 @@ public class RegisterController {
                         picosSup
                 );
 
-        superior.setByX(-2410);
+        superior.setByX(-1084);
+        superior.setInterpolator(Interpolator.LINEAR);
         superior.setCycleCount(Animation.INDEFINITE);
         superior.setAutoReverse(false);
 
@@ -75,7 +77,8 @@ public class RegisterController {
                         picosInf
                 );
 
-        inferior.setByX(2410);
+        inferior.setByX(1084);
+        inferior.setInterpolator(Interpolator.LINEAR);
         inferior.setCycleCount(Animation.INDEFINITE);
         inferior.setAutoReverse(false);
 
@@ -88,17 +91,48 @@ public class RegisterController {
     private void togglePasswordVisibility() {
         passwordVisible = !passwordVisible;
 
-        AddresField.setVisible(!passwordVisible);
-        AddresField.setManaged(!passwordVisible);
+        if (passwordVisible) {
+            // Mostrar contraseña
+            PasswordVisibleField.setText(AddresField.getText());
 
-        PasswordVisibleField.setVisible(passwordVisible);
-        PasswordVisibleField.setManaged(passwordVisible);
+            AddresField.setVisible(false);
+            AddresField.setManaged(false);
 
-        EyeClosed.setVisible(!passwordVisible);
-        EyeClosed.setManaged(!passwordVisible);
+            PasswordVisibleField.setVisible(true);
+            PasswordVisibleField.setManaged(true);
 
-        EyeOpen.setVisible(passwordVisible);
-        EyeOpen.setManaged(passwordVisible);
+            EyeClosed.setVisible(false);
+            EyeClosed.setManaged(false);
+
+            EyeOpen.setVisible(true);
+            EyeOpen.setManaged(true);
+
+            PasswordVisibleField.requestFocus();
+            PasswordVisibleField.positionCaret(
+                    PasswordVisibleField.getText().length()
+            );
+
+        } else {
+            // Ocultar contraseña
+            AddresField.setText(PasswordVisibleField.getText());
+
+            PasswordVisibleField.setVisible(false);
+            PasswordVisibleField.setManaged(false);
+
+            AddresField.setVisible(true);
+            AddresField.setManaged(true);
+
+            EyeOpen.setVisible(false);
+            EyeOpen.setManaged(false);
+
+            EyeClosed.setVisible(true);
+            EyeClosed.setManaged(true);
+
+            AddresField.requestFocus();
+            AddresField.positionCaret(
+                    AddresField.getText().length()
+            );
+        }
     }
 
     // REGISTRAR USUARIO
