@@ -38,8 +38,15 @@ Sistema Inventario/
 │
 ├── Sonidos/
 │
-└── data/                 (se creará automáticamente)
+└── data/                       (se creará automáticamente)
     ├── Admins/
-    ├── Vende/
+    │   └── users.json
+    ├── Vendedor/
+    │   └── users.json
     └── Registro/
-        └── DD-MM-AA.json (asi deben estar numerados)
+        └── DD-MM-AA/           (asi deben estar numerados)
+            └── registro.json
+
+    [Ubicación privada/secreta fuera de Data]/
+    └── auditoria/
+        └── registro-encriptado.json

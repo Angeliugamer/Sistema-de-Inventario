@@ -1,29 +1,23 @@
 import Controllers.AppNavigator;
+// import Services.UserService;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
 public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        // Estas son Los Comandos de las funciones
+        // Estos son Los Comandos de las funciones
 
-        // Registrar
-        // UserService.register("Angeliu", "MiContraseña");
+        // Registrar Administrador Nuevo
+        // boolean created = UserService.createAdminByCode(
+        //         "NOMBRE_ADMIN",
+        //         "CONTRASENA_ADMIN"
+        // );
 
-        // Iniciar sesión
-        // User user = UserService.authenticate("Angeliu", "MiContraseña");
-
-        // Registrar una compra
-        // PurchaseService.addPurchase("Teclado", 2, 150000);
-
-        // Consultar las compras del usuario actual
-        // List<Purchase> historial = PurchaseService.getUserPurchases();
-
-        // for (Purchase compra : historial) {
-        //     System.out.println(compra.getProduct());
-        //     System.out.println(compra.getTotal());
-        //     System.out.println(compra.getDate());
-        // }
+        // System.out.println(created
+        //         ? "Administrador creado."
+        //         : "No se pudo crear el administrador."
+        // );
 
         AppNavigator.setStage(stage);
 

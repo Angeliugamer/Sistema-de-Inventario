@@ -1,5 +1,8 @@
 package Services;
 
+import Models.User;
+import Models.Purchase;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -9,6 +12,7 @@ import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,26 +22,36 @@ public class JsonStorage {
             .create();
 
     private static final Path DATA_DIR =
-            Path.of(System.getProperty("user.home"),
-                    ".sistema-inventario");
+            Path.of(System.getProperty("user.dir"), "data");
 
-    private static final Path USERS_FILE =
-            DATA_DIR.resolve("users.json");
+    private static final Path ADMINS_DIR =
+            DATA_DIR.resolve("Admins");
+
+    private static final Path SELLERS_DIR =
+            DATA_DIR.resolve("Vendedor");
+
+    private static final Path ADMIN_USERS_FILE =
+            ADMINS_DIR.resolve("users.json");
+
+    private static final Path SELLER_USERS_FILE =
+            SELLERS_DIR.resolve("users.json");
 
     private static final Path PURCHASES_FILE =
             DATA_DIR.resolve("purchases.json");
 
     private static final Type USER_LIST =
-            new TypeToken<ArrayList<Models.User>>() {}.getType();
+            new TypeToken<ArrayList<User>>() {}.getType();
 
     private static final Type PURCHASE_LIST =
-            new TypeToken<ArrayList<Models.Purchase>>() {}.getType();
+            new TypeToken<ArrayList<Purchase>>() {}.getType();
 
     static {
         try {
-            Files.createDirectories(DATA_DIR);
+            Files.createDirectories(ADMINS_DIR);
+            Files.createDirectories(SELLERS_DIR);
 
-            createFile(USERS_FILE);
+            createFile(ADMIN_USERS_FILE);
+            createFile(SELLER_USERS_FILE);
             createFile(PURCHASES_FILE);
 
         } catch (IOException e) {
@@ -47,14 +61,17 @@ public class JsonStorage {
 
     private static void createFile(Path path) throws IOException {
         if (Files.notExists(path)) {
-            Files.writeString(path, "[]", StandardCharsets.UTF_8);
+            Files.writeString(
+                    path, "[]",
+                    StandardCharsets.UTF_8
+            );
         }
     }
 
-    public static synchronized <T> List<T> read(
-            Path path, Type type) {
-
+    public static synchronized <T> List<T> read(Path path, Type type) {
         try {
+            createFile(path);
+
             String json = Files.readString(
                     path, StandardCharsets.UTF_8);
 
@@ -68,39 +85,54 @@ public class JsonStorage {
         }
     }
 
-    public static synchronized <T> void write(
-            Path path, List<T> data) {
-
+    public static synchronized <T> void write(Path path, List<T> data) {
         try {
-            String json = gson.toJson(data);
+            Files.createDirectories(path.getParent());
+
+            Path temporaryFile = path.resolveSibling(path.getFileName() + ".tmp");
 
             Files.writeString(
-                    path,
-                    json,
+                    temporaryFile,
+                    gson.toJson(data),
                     StandardCharsets.UTF_8
             );
 
+            try {
+                Files.move(temporaryFile, path,
+                        StandardCopyOption.REPLACE_EXISTING,
+                        StandardCopyOption.ATOMIC_MOVE
+                );
+
+            } catch (IOException atomicError) {
+                Files.move(temporaryFile, path,
+                        StandardCopyOption.REPLACE_EXISTING
+                );
+            }
+
         } catch (IOException e) {
             throw new RuntimeException(
-                    "Error guardando JSON: " + path, e);
+                    "Error guardando JSON: " + path, e
+            );
         }
     }
 
-    public static List<Models.User> readUsers() {
-        return read(USERS_FILE, USER_LIST);
-    }
+    // USUARIOS ADMINISTRADORES
+    public static synchronized List<User> readAdmins() {return read(ADMIN_USERS_FILE, USER_LIST);}
+    public static synchronized void saveAdmins(List<User> users) {write(ADMIN_USERS_FILE, users);}
 
-    public static void saveUsers(List<Models.User> users) {
-        write(USERS_FILE, users);
-    }
+    // USUARIOS VENDEDORES
+    public static synchronized List<User> readSellers() {return read(SELLER_USERS_FILE, USER_LIST);}
+    public static synchronized void saveSellers(List<User> users) {write(SELLER_USERS_FILE, users);}
 
-    public static List<Models.Purchase> readPurchases() {
-        return read(PURCHASES_FILE, PURCHASE_LIST);
-    }
-
-    public static void savePurchases(
-            List<Models.Purchase> purchases) {
-
+    // COMPRAS Y VENTAS (se conserva la estructura anterior)
+    public static synchronized List<Purchase> readPurchases() {return read(PURCHASES_FILE, PURCHASE_LIST);}
+    public static synchronized void savePurchases(
+            List<Purchase> purchases) {
         write(PURCHASES_FILE, purchases);
     }
+
+    // RUTAS DE LOS ARCHIVOS
+    public static Path getDataDirectory() {return DATA_DIR;}
+    public static Path getAdminsFile() {return ADMIN_USERS_FILE;}
+    public static Path getSellersFile() {return SELLER_USERS_FILE;}
 }

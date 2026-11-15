@@ -1,6 +1,7 @@
 package Controllers;
 
 import Services.UserService;
+import Services.Session;
 
 import javafx.animation.Animation;
 import javafx.animation.TranslateTransition;
@@ -8,8 +9,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
-
-import java.util.Optional;
 
 public class RegisterController {
     @FXML private ImageView picosSup;
@@ -57,7 +56,6 @@ public class RegisterController {
     }
 
     // ANIMACIONES (porfavor no lo quiten)
-
     private void animatePicos() {
         // Superior: derecha a izquierda
         TranslateTransition superior =
@@ -86,7 +84,6 @@ public class RegisterController {
     }
 
     // MOSTRAR / OCULTAR CONTRASEÑA
-
     @FXML
     private void togglePasswordVisibility() {
         passwordVisible = !passwordVisible;
@@ -105,9 +102,17 @@ public class RegisterController {
     }
 
     // REGISTRAR USUARIO
-
     @FXML
     private void register() {
+        if (!Session.isAdmin()) {
+            showResult(
+                    Alert.AlertType.ERROR,
+                    "No se pudo completar el registro",
+                    "No tienes autorización para registrar usuarios."
+            );
+            return;
+        }
+
         String username = UsserField.getText().trim();
 
         String password = passwordVisible
@@ -115,44 +120,61 @@ public class RegisterController {
                 : AddresField.getText();
 
         if (username.isEmpty() || password.isEmpty()) {
-            showError("Completa todos los campos.");
+            showResult(
+                    Alert.AlertType.ERROR,
+                    "No se pudo completar el registro",
+                    "Completa todos los campos."
+            );
             return;
         }
 
         if (password.length() < 6) {
-            showError("La contraseña debe tener al menos 6 caracteres.");
+            showResult(
+                    Alert.AlertType.ERROR,
+                    "No se pudo completar el registro",
+                    "La contraseña debe tener al menos 6 caracteres."
+            );
             return;
         }
 
-        boolean registered = UserService.register(
+        boolean registered = UserService.registerSeller(
                 username, password
         );
 
         if (registered) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            showResult(
+                    Alert.AlertType.INFORMATION,
+                    "Registro completado",
+                    "El vendedor se registró correctamente."
+            );
 
-            alert.setTitle("Registro");
-            alert.setHeaderText("¡Cuenta creada!");
-            alert.setContentText("El usuario se registró correctamente.");
-
-            alert.showAndWait();
-
-            try {
-                AppNavigator.showLogin();
-            } catch (Exception e) {
-                e.printStackTrace();
-                showError("No se pudo regresar al Login.");
-            }
+            UsserField.clear();
+            AddresField.clear();
+            PasswordVisibleField.clear();
 
         } else {
-            showError(
+            showResult(
+                    Alert.AlertType.ERROR,
+                    "No se pudo completar el registro",
                     "El usuario ya existe o ocurrió un error."
             );
         }
     }
 
-    // REGRESAR AL LOGIN
+    // VENTANA INDEPENDIENTE DE RESULTADO
+    private void showResult(
+            Alert.AlertType type,
+            String title, String message) {
+        Alert alert = new Alert(type);
 
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+
+        alert.showAndWait();
+    }
+
+    // REGRESAR AL LOGIN
     @FXML
     private void backToLogin() {
         try {
@@ -160,14 +182,12 @@ public class RegisterController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            showError("No se pudo abrir el Login.");
+
+            showResult(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "No se pudo abrir el Login."
+            );
         }
-    }
-
-    private void showError(String message) {
-
-        ErrorLabel.setText(message);
-        ErrorLabel.setVisible(true);
-        ErrorLabel.setManaged(true);
     }
 }
