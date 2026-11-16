@@ -1,5 +1,7 @@
 import Controllers.AppNavigator;
 // import Services.UserService;
+import Services.ButtonSound;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -27,6 +29,8 @@ public class Main extends Application {
         AppNavigator.showLogin();
 
         stage.show();
+
+        ButtonSound.playStartupSound();
     }
 
     public static void main(String[] args) {

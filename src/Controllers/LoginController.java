@@ -6,10 +6,13 @@ import Services.UserService;
 import Services.ButtonSound;
 
 import javafx.animation.Animation;
+import javafx.animation.Timeline;
+import javafx.animation.KeyFrame;
 import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
@@ -140,8 +143,6 @@ public class LoginController {
     // INICIAR SESIÓN
     @FXML
     private void login() {
-        ButtonSound.playClick();
-
         String username = UsserField.getText().trim();
 
         String password = passwordVisible
@@ -149,7 +150,7 @@ public class LoginController {
                 : AddresField.getText();
 
         if (username.isEmpty() || password.isEmpty()) {
-            showError("Completa todos los campos.");
+            showError("Completa todos los campos.", 0);
             return;
         }
 
@@ -158,7 +159,7 @@ public class LoginController {
         );
 
         if (user == null) {
-            showError("Usuario o contraseña incorrectos.");
+            showError("Usuario o contraseña incorrectos.", 1);
             return;
         }
 
@@ -177,16 +178,50 @@ public class LoginController {
                 AppNavigator.showInventory();
             }
 
+            ButtonSound.playClick();
+
         } catch (Exception e) {
             Session.logout();
             e.printStackTrace();
-            showError("No se pudo abrir el inventario.");
+            showError("No se pudo abrir el inventario.", 2);
         }
     }
 
-    private void showError(String message) {
+    private Timeline messageTimer;
+
+    private void showError(String message, int errorType) {
+        // Detener el temporizador anterior.
+        if (messageTimer != null) {
+            messageTimer.stop();
+        }
+
+        // Mostrar el mensaje.
         ErrorLabel.setText(message);
         ErrorLabel.setVisible(true);
         ErrorLabel.setManaged(true);
+
+        // Estilo del mensaje.
+        ErrorLabel.setStyle(
+                "-fx-font-weight: bold;" + "-fx-text-fill: #12345A;"
+        );
+
+        // Seleccionar el sonido según el tipo de error.
+        switch (errorType) {
+            case 0  -> ButtonSound.playClick("Win11Error");
+            case 1  -> ButtonSound.playClick("deny");
+            case 2  -> ButtonSound.playClick("error");
+            default -> ButtonSound.playClick();
+        }
+
+        // Ocultar el mensaje después de 4 segundos.
+        messageTimer = new Timeline(
+                new KeyFrame(Duration.seconds(4), event -> {
+                    ErrorLabel.setText("");
+                    ErrorLabel.setVisible(false);
+                    ErrorLabel.setManaged(false);
+                })
+        );
+
+        messageTimer.play();
     }
 }

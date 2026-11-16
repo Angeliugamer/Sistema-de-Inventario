@@ -6,7 +6,7 @@ import javafx.scene.media.MediaPlayer;
 import java.net.URL;
 
 public class ButtonSound {
-    private static final String DEFAULT_SOUND = "Win11 notificacion.mp3";
+    private static final String DEFAULT_SOUND = "Win11Not.mp3";
     private static MediaPlayer player;
 
     // REPRODUCIR SONIDO PREDETERMINADO
@@ -61,5 +61,60 @@ public class ButtonSound {
                     "Error al reproducir sonido: " + e.getMessage()
             );
         }
+    }
+
+    public static void playStartupSound() {
+        int build = getWindowsBuild();
+
+        String sound;
+
+        if (build >= 22000) {
+            // Windows 11 y futuras versiones
+            sound = "Windows 11 Startup sound";
+        } else if (build >= 10240) {
+            // Windows 10
+            sound = "Windows 10 Startup sound";
+        } else if (build > 0) {
+            // Windows anteriores a Windows 10
+            sound = "Windows XP Startup Sound";
+        } else {
+            // Si no se pudo identificar el sistema
+            sound = "Windows 10 Startup sound";
+        }
+
+        playClick(sound);
+    }
+
+    private static int getWindowsBuild() {
+        try {
+            Process process = new ProcessBuilder(
+                    "reg.exe", "query",
+                    "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion",
+                    "/v", "CurrentBuildNumber"
+            ).redirectErrorStream(true).start();
+
+            if (!process.waitFor(2, java.util.concurrent.TimeUnit.SECONDS)) {
+                process.destroyForcibly();
+                return -1;
+            }
+
+            String output = new String(
+                    process.getInputStream().readAllBytes()
+            );
+
+            java.util.regex.Matcher matcher =
+                    java.util.regex.Pattern
+                            .compile("CurrentBuildNumber\\s+REG_SZ\\s+(\\d+)")
+                            .matcher(output);
+
+            if (matcher.find()) {
+                return Integer.parseInt(matcher.group(1));
+            }
+
+        } catch (Exception e) {
+            System.out.println("No se pudo identificar la versión de Windows.");
+        }
+
+        return -1;
     }
 }

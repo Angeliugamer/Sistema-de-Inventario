@@ -5,10 +5,13 @@ import Services.UserService;
 import Services.ButtonSound;
 
 import javafx.animation.Animation;
+import javafx.animation.Timeline;
+import javafx.animation.KeyFrame;
 import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
@@ -145,7 +148,8 @@ public class RegisterController {
             showResult(
                     Alert.AlertType.ERROR,
                     "No se pudo completar el registro",
-                    "No tienes autorización para registrar usuarios."
+                    "No tienes autorización para registrar usuarios.",
+                    2
             );
             return;
         }
@@ -160,7 +164,8 @@ public class RegisterController {
             showResult(
                     Alert.AlertType.ERROR,
                     "No se pudo completar el registro",
-                    "Completa todos los campos."
+                    "Completa todos los campos.",
+                    1
             );
             return;
         }
@@ -169,7 +174,8 @@ public class RegisterController {
             showResult(
                     Alert.AlertType.ERROR,
                     "No se pudo completar el registro",
-                    "La contraseña debe tener al menos 6 caracteres."
+                    "La contraseña debe tener al menos 6 caracteres.",
+                    0
             );
             return;
         }
@@ -182,7 +188,8 @@ public class RegisterController {
             showResult(
                     Alert.AlertType.INFORMATION,
                     "Registro completado",
-                    "El vendedor se registró correctamente."
+                    "El vendedor se registró correctamente.",
+                    3
             );
 
             UsserField.clear();
@@ -193,22 +200,51 @@ public class RegisterController {
             showResult(
                     Alert.AlertType.ERROR,
                     "No se pudo completar el registro",
-                    "El usuario ya existe o ocurrió un error."
+                    "El usuario ya existe o ocurrió un error.",
+                    2
             );
         }
     }
 
     // VENTANA INDEPENDIENTE DE RESULTADO
-    private void showResult(
-            Alert.AlertType type,
-            String title, String message) {
+    private Timeline messageTimer;
+
+    private void showResult(Alert.AlertType type,
+            String title, String message, int errorType) {
         Alert alert = new Alert(type);
 
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
 
-        alert.showAndWait();
+        // Estilo del mensaje.
+        alert.getDialogPane().setStyle(
+                "-fx-font-weight: bold;" + "-fx-text-fill: #12345A;"
+        );
+
+        // Seleccionar el sonido.
+        switch (errorType) {
+            case -1 -> ButtonSound.playClick("glitch");
+            case 0  -> ButtonSound.playClick("Win11Error");
+            case 1  -> ButtonSound.playClick("deny");
+            case 2  -> ButtonSound.playClick("error");
+            case 3  -> ButtonSound.playClick("KeyboardClick");
+            default -> ButtonSound.playClick();
+        }
+
+        // Mostrar la alerta.
+        alert.show();
+
+        // Reiniciar el temporizador.
+        if (messageTimer != null) {
+            messageTimer.stop();
+        }
+
+        messageTimer = new Timeline(
+                new KeyFrame(Duration.seconds(4), event -> alert.close())
+        );
+
+        messageTimer.play();
     }
 
     // REGRESAR AL LOGIN
@@ -225,7 +261,8 @@ public class RegisterController {
             showResult(
                     Alert.AlertType.ERROR,
                     "Error",
-                    "No se pudo abrir el Login."
+                    "No se pudo abrir el Login.",
+                    -1
             );
         }
     }
