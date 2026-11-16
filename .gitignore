@@ -1,5 +1,6 @@
 ### Datos privados del programa ###
 data/
+/ChatGPT Memory.txt
 
 ### IntelliJ IDEA ###
 out/
