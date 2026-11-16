@@ -1,4 +1,5 @@
 package Interfaces;
 
-public interface Criterio {
+public interface Criterio<T> {
+    Boolean evaluar(T producto);
 }
