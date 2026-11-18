@@ -58,6 +58,9 @@ public class RegisterController {
                     }
                 }
         );
+
+        UsserField.setOnAction(event -> AddresField.requestFocus());
+        AddresField.setOnAction(event -> register());
     }
 
     // ANIMACIONES (porfavor no lo quiten)
@@ -253,7 +256,7 @@ public class RegisterController {
         ButtonSound.playClick();
 
         try {
-            AppNavigator.showLogin();
+            AppNavigator.showInventory();
 
         } catch (Exception e) {
             e.printStackTrace();

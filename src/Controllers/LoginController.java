@@ -59,6 +59,9 @@ public class LoginController {
                     }
                 }
         );
+
+        UsserField.setOnAction(event -> AddresField.requestFocus());
+        AddresField.setOnAction(event -> login());
     }
 
     // ANIMACIONES (porfavor no lo quiten)

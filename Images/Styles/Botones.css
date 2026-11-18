@@ -22,3 +22,23 @@
 .boton-naranja:pressed {
     -fx-background-color: #A00A06;
 }
+
+/* ESTILO TRANSPARENTE */
+.boton-navegacion {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-border-color: transparent;
+    -fx-border-insets: 0;
+    -fx-border-radius: 0;
+    -fx-padding: 0;
+    -fx-cursor: hand;
+}
+
+.boton-navegacion:hover {
+    -fx-background-color: rgba(65, 105, 225, 0.30);
+}
+
+.boton-navegacion:pressed {
+    -fx-background-color: rgba(255, 255, 255, 0.45);
+}

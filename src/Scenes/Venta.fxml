@@ -6,6 +6,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.*?>
 
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" stylesheets="@../Styles/Botones.css" fx:controller="Controllers.VentaController">
    <children>
@@ -35,7 +36,7 @@
             </ImageView>
             <ImageView fitHeight="60.0" fitWidth="63.0" layoutX="1108.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../Icons/ShoppingCart.png" />
+                  <Image url="@../Icons/CaretCircleLeft.png" />
                </image>
                <effect>
                   <ColorAdjust brightness="1.0" />
@@ -49,13 +50,6 @@
                   <ColorAdjust brightness="1.0" />
                </effect>
             </ImageView>
-         </children>
-      </Pane>
-      <Pane prefHeight="200.0" prefWidth="200.0">
-         <children>
-            <Button fx:id="Out" layoutX="25.0" layoutY="22.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="52.0" style="-fx-background-color: transparent;" />
-            <Button fx:id="Shop" layoutX="1108.0" layoutY="26.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="60.0" style="-fx-background-color: transparent;" />
-            <Button fx:id="Usser" layoutX="1189.0" layoutY="14.0" mnemonicParsing="false" prefHeight="79.0" prefWidth="82.0" style="-fx-background-color: transparent;" />
          </children>
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0">
@@ -99,7 +93,20 @@
                   <Image url="@../Shared/3%20Venta/Boton%20Continuar.png" />
                </image>
             </ImageView>
-            <Button layoutX="887.0" layoutY="335.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="327.0" style="-fx-background-color: transparent;" />
-         </children></Pane>
+         </children>
+      </Pane>
+      <Pane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <Button fx:id="Out" layoutX="25.0" layoutY="22.0" mnemonicParsing="false" onAction="#logout" prefHeight="56.0" prefWidth="52.0" styleClass="boton-navegacion" />
+            <Button fx:id="Back" layoutX="1108.0" layoutY="26.0" mnemonicParsing="false" onAction="#backToProducts" prefHeight="60.0" prefWidth="60.0" styleClass="boton-navegacion" />
+
+            <Button fx:id="Continuar" layoutX="887.0" layoutY="335.0" mnemonicParsing="false" onAction="#purchase" prefHeight="48.0" prefWidth="327.0" style="-fx-background-color: transparent;" />
+            <Button fx:id="Historial" layoutX="999.0" layoutY="575.0" mnemonicParsing="false" onAction="#openHistory" prefHeight="40.0" prefWidth="150.0" styleClass="boton-naranja" text="Historial de Ventas">
+               <font>
+                  <Font name="Arial" size="14.0" />
+               </font>
+            </Button>
+         </children>
+      </Pane>
    </children>
 </StackPane>

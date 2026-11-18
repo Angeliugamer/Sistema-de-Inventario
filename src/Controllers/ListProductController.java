@@ -11,6 +11,7 @@ public class ListProductController {
     @FXML private Button Out;
     @FXML private Button Shop;
     @FXML private Button Regist;
+    @FXML private Button Historial;
 
     @FXML
     public void initialize() {
@@ -18,12 +19,15 @@ public class ListProductController {
 
         Regist.setVisible(admin);
         Regist.setManaged(admin);
+
+        Historial.setVisible(admin);
+        Historial.setManaged(admin);
     }
 
     // CERRAR SESIÓN Y VOLVER AL LOGIN
     @FXML
     private void logout() {
-        ButtonSound.playClick();
+        // ButtonSound.playClick();
         Session.logout();
 
         try {
@@ -44,7 +48,7 @@ public class ListProductController {
     // ABRIR VENTANA DE VENTA
     @FXML
     private void openShop() {
-        ButtonSound.playClick();
+        ButtonSound.playClick("Caja Registradora");
 
         try {
             AppNavigator.showVenta();
@@ -67,7 +71,7 @@ public class ListProductController {
             return;
         }
 
-        ButtonSound.playClick();
+        // ButtonSound.playClick();
 
         try {
             AppNavigator.showRegister();
