@@ -1,6 +1,8 @@
 package Models;
 
-public class User {
+import Interfaces.Identificable;
+
+public class User implements Identificable {
     private String id;
     private String username;
     private String passwordHash;

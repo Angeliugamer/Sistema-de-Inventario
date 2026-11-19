@@ -21,23 +21,14 @@ public class JsonStorage {
             .setPrettyPrinting()
             .create();
 
-    private static final Path DATA_DIR =
-            Path.of(System.getProperty("user.dir"), "data");
-
-    private static final Path ADMINS_DIR =
-            DATA_DIR.resolve("Admins");
-
-    private static final Path SELLERS_DIR =
-            DATA_DIR.resolve("Vendedor");
-
-    private static final Path ADMIN_USERS_FILE =
-            ADMINS_DIR.resolve("users.json");
-
-    private static final Path SELLER_USERS_FILE =
-            SELLERS_DIR.resolve("users.json");
-
-    private static final Path PURCHASES_FILE =
-            DATA_DIR.resolve("purchases.json");
+    private static final Path DATA_DIR = Path.of(System.getProperty("user.dir"), "data");
+    private static final Path ADMINS_DIR = DATA_DIR.resolve("Admins");
+    private static final Path SELLERS_DIR = DATA_DIR.resolve("Vendedor");
+    private static final Path ADMIN_USERS_FILE = ADMINS_DIR.resolve("users.json");
+    private static final Path SELLER_USERS_FILE = SELLERS_DIR.resolve("users.json");
+    private static final Path PURCHASES_FILE = DATA_DIR.resolve("purchases.json");
+    private static final Path PRODUCTS_FILE = DATA_DIR.resolve("products.json");
+    private static final Path AUDIT_FILE = DATA_DIR.resolve("audit.json");
 
     private static final Type USER_LIST =
             new TypeToken<ArrayList<User>>() {}.getType();
@@ -53,6 +44,8 @@ public class JsonStorage {
             createFile(ADMIN_USERS_FILE);
             createFile(SELLER_USERS_FILE);
             createFile(PURCHASES_FILE);
+            createFile(PRODUCTS_FILE);
+            createFile(AUDIT_FILE);
 
         } catch (IOException e) {
             throw new ExceptionInInitializerError(e);
@@ -126,13 +119,17 @@ public class JsonStorage {
 
     // COMPRAS Y VENTAS (se conserva la estructura anterior)
     public static synchronized List<Purchase> readPurchases() {return read(PURCHASES_FILE, PURCHASE_LIST);}
-    public static synchronized void savePurchases(
-            List<Purchase> purchases) {
-        write(PURCHASES_FILE, purchases);
-    }
+    public static synchronized void savePurchases(List<Purchase> purchases) {write(PURCHASES_FILE, purchases);}
 
     // RUTAS DE LOS ARCHIVOS
     public static Path getDataDirectory() {return DATA_DIR;}
     public static Path getAdminsFile() {return ADMIN_USERS_FILE;}
     public static Path getSellersFile() {return SELLER_USERS_FILE;}
+
+    // RUTAS DE LAS LISTAS
+    public static Path getProductsFile() {return PRODUCTS_FILE;}
+    public static Path getPurchasesFile() {return PURCHASES_FILE;}
+    public static Path getAuditFile() {return AUDIT_FILE;}
+    public static Path getAdminUsersFile() {return ADMIN_USERS_FILE;}
+    public static Path getSellerUsersFile() {return SELLER_USERS_FILE;}
 }

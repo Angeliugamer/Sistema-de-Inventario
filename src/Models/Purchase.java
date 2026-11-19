@@ -1,8 +1,10 @@
 package Models;
 
+import Interfaces.Identificable;
+
 import java.time.LocalDateTime;
 
-public class Purchase {
+public class Purchase implements Identificable {
     private String id;
     private String userId;
     private String product;
