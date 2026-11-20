@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../Styles/Botones.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.SegundaFase.RegistroController">
+   <children>
+      <Pane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <ImageView fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true">
+               <image><Image url="@../Shared/1%20Login/Fondo.png" /></image>
+            </ImageView>
+            <ImageView fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true">
+               <image><Image url="@../Shared/2%20Lista%20Productos/Coso%20Astetic.png" /></image>
+            </ImageView>
+            <ImageView fitHeight="497.0" fitWidth="872.0" layoutX="59.0" layoutY="147.0" pickOnBounds="true" preserveRatio="true">
+               <image><Image url="@../Shared/2%20Lista%20Productos/Espacio%20para%20la%20lista.png" /></image>
+            </ImageView>
+         </children>
+      </Pane>
+      <Pane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <ImageView fitHeight="56.0" fitWidth="57.0" layoutX="23.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+               <image><Image url="@../Icons/SignOut.png" /></image>
+               <effect><ColorAdjust brightness="1.0" /></effect>
+            </ImageView>
+            <ImageView fitHeight="60.0" fitWidth="63.0" layoutX="1108.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true">
+               <image><Image url="@../Icons/CaretCircleLeft.png" /></image>
+               <effect><ColorAdjust brightness="1.0" /></effect>
+            </ImageView>
+            <ImageView fitHeight="96.0" fitWidth="96.0" layoutX="1182.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
+               <image><Image url="@../Icons/UserCircle.png" /></image>
+               <effect><ColorAdjust brightness="1.0" /></effect>
+            </ImageView>
+         </children>
+      </Pane>
+      <Pane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <Button fx:id="Out" layoutX="25.0" layoutY="22.0" mnemonicParsing="false" onAction="#logout" prefHeight="56.0" prefWidth="52.0" styleClass="boton-navegacion" />
+            <Button fx:id="Back" layoutX="1108.0" layoutY="26.0" mnemonicParsing="false" onAction="#backToProducts" prefHeight="60.0" prefWidth="60.0" styleClass="boton-navegacion" />
+
+            <ListView fx:id="ListProd" layoutX="61.0" layoutY="148.0" prefHeight="491.0" prefWidth="866.0" style="-fx-background-color: transparent;" />
+
+            <TextField fx:id="BarraBusqueda" layoutX="959.0" layoutY="159.0" prefHeight="26.0" prefWidth="229.0" promptText="Busqueda">
+               <font><Font name="Arial" size="12.0" /></font>
+            </TextField>
+            <Button fx:id="BtnBusqueda" layoutX="1202.0" layoutY="155.0" mnemonicParsing="false" styleClass="boton-naranja" text="Buscar">
+               <font><Font name="Arial" size="12.0" /></font>
+            </Button>
+            <Button fx:id="BtnAgregar" layoutX="994.0" layoutY="214.0" mnemonicParsing="false" styleClass="boton-naranja" text="Agregar">
+               <font><Font name="Arial" size="12.0" /></font>
+            </Button>
+            <Button fx:id="BtnEliminar" layoutX="1101.0" layoutY="214.0" mnemonicParsing="false" styleClass="boton-naranja" text="Eliminar">
+               <font><Font name="Arial" size="12.0" /></font>
+            </Button>
+
+         </children>
+      </Pane>
+   </children>
+</StackPane>

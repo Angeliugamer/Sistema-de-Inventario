@@ -24,6 +24,9 @@ public class JsonStorage {
     private static final Path DATA_DIR = Path.of(System.getProperty("user.dir"), "data");
     private static final Path ADMINS_DIR = DATA_DIR.resolve("Admins");
     private static final Path SELLERS_DIR = DATA_DIR.resolve("Vendedor");
+    private static final Path PURCHASES_DIR = DATA_DIR.resolve("purchases");
+    private static final Path AUDIT_DIR = DATA_DIR.resolve("audit");
+
     private static final Path ADMIN_USERS_FILE = ADMINS_DIR.resolve("users.json");
     private static final Path SELLER_USERS_FILE = SELLERS_DIR.resolve("users.json");
     private static final Path PURCHASES_FILE = DATA_DIR.resolve("purchases.json");
@@ -53,6 +56,8 @@ public class JsonStorage {
     }
 
     private static void createFile(Path path) throws IOException {
+        Files.createDirectories(path.getParent());
+
         if (Files.notExists(path)) {
             Files.writeString(
                     path, "[]",
@@ -123,6 +128,9 @@ public class JsonStorage {
 
     // RUTAS DE LOS ARCHIVOS
     public static Path getDataDirectory() {return DATA_DIR;}
+    public static Path getPurchasesDirectory() {return PURCHASES_DIR;}
+    public static Path getAuditDirectory() {return AUDIT_DIR;}
+
     public static Path getAdminsFile() {return ADMIN_USERS_FILE;}
     public static Path getSellersFile() {return SELLER_USERS_FILE;}
 

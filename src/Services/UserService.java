@@ -7,6 +7,7 @@ import javax.crypto.spec.PBEKeySpec;
 
 import java.security.MessageDigest;
 import java.security.SecureRandom;
+
 import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
@@ -24,7 +25,6 @@ public class UserService {
 
     private static String hashPassword(
             String password, String salt) throws Exception {
-
         byte[] decodedSalt = Base64.getDecoder().decode(salt);
 
         PBEKeySpec spec = new PBEKeySpec(
@@ -104,8 +104,14 @@ public class UserService {
             );
 
             List<User> sellers = JsonStorage.readSellers();
+
             sellers.add(newUser);
             JsonStorage.saveSellers(sellers);
+
+            AuditService.recordUserChange(
+                    "CREAR", null, newUser
+            );
+
             return true;
 
         } catch (Exception e) {
@@ -224,7 +230,6 @@ public class UserService {
             User user,
             List<User> source,
             List<User> destination) {
-
         source.removeIf(existing ->
                 existing.getId().equals(user.getId())
         );

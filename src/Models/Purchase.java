@@ -12,6 +12,9 @@ public class Purchase implements Identificable {
     private double total;
     private String date;
 
+    public Purchase() {
+    }
+
     public Purchase(String id, String userId, String product, int quantity, double total) {
         this.id = id;
         this.userId = userId;
@@ -21,27 +24,10 @@ public class Purchase implements Identificable {
         this.date = LocalDateTime.now().toString();
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public String getProduct() {
-        return product;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public double getTotal() {
-        return total;
-    }
-
-    public String getDate() {
-        return date;
-    }
+    public String getId() {return id;}
+    public String getUserId() {return userId;}
+    public String getProduct() {return product;}
+    public int getQuantity() {return quantity;}
+    public double getTotal() {return total;}
+    public String getDate() {return date;}
 }

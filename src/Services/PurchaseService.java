@@ -2,28 +2,37 @@ package Services;
 
 import Models.Purchase;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 public class PurchaseService {
+    private static final DailyJsonListService<Purchase> storage =
+            new DailyJsonListService<>(
+                    JsonStorage.getPurchasesDirectory(),
+                    Purchase.class,
+                    purchase -> LocalDateTime
+                            .parse(purchase.getDate())
+                            .toLocalDate()
+            );
+
+    // REGISTRAR UNA VENTA
     public static void addPurchase(
             String product, int quantity, double total) {
-
         String userId = Session.getCurrentUserId();
 
         if (userId == null) {
             throw new IllegalStateException(
-                    "No hay ningún usuario conectado.");
+                    "No hay ningún usuario conectado."
+            );
         }
 
-        if (product == null || product.isBlank()
-                || quantity <= 0 || total < 0) {
+        if (product == null || product.isBlank() || quantity <= 0 || total < 0) {
             throw new IllegalArgumentException(
-                    "Los datos de la compra no son válidos.");
+                    "Los datos de la compra no son válidos."
+            );
         }
-
-        List<Purchase> purchases =
-                JsonStorage.readPurchases();
 
         Purchase purchase = new Purchase(
                 UUID.randomUUID().toString(),
@@ -33,23 +42,53 @@ public class PurchaseService {
                 total
         );
 
-        purchases.add(purchase);
+        storage.add(purchase);
 
-        JsonStorage.savePurchases(purchases);
+        // Guardar el registro de auditoría
+        AuditService.recordPurchaseChange(
+                "CREAR",
+                null,
+                purchase
+        );
     }
 
+    // CONSULTAR LAS COMPRAS DEL USUARIO ACTUAL
     public static List<Purchase> getUserPurchases() {
-
         String userId = Session.getCurrentUserId();
 
         if (userId == null) {
             throw new IllegalStateException(
-                    "No hay ningún usuario conectado.");
+                    "No hay ningún usuario conectado."
+            );
         }
 
-        return JsonStorage.readPurchases()
+        return storage.readAll()
                 .stream()
                 .filter(p -> p.getUserId().equals(userId))
                 .toList();
+    }
+
+    // CONSULTAR LAS VENTAS DE UN DÍA
+    public static List<Purchase> getPurchasesByDate(
+            LocalDate date) {
+        if (!Session.isAdmin()) {
+            throw new SecurityException(
+                    "Solo un administrador puede consultar el historial."
+            );
+        }
+
+        return storage.readByDate(date);
+    }
+
+    // CONSULTAR LAS VENTAS ENTRE FECHAS
+    public static List<Purchase> getPurchasesBetween(
+            LocalDate start, LocalDate end) {
+        if (!Session.isAdmin()) {
+            throw new SecurityException(
+                    "Solo un administrador puede consultar el historial."
+            );
+        }
+
+        return storage.readBetween(start, end);
     }
 }

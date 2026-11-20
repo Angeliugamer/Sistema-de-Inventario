@@ -33,7 +33,5 @@ public class Main extends Application {
         ButtonSound.playStartupSound();
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+    public static void main(String[] args) {launch(args);}
 }

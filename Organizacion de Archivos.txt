@@ -18,6 +18,7 @@ Sistema Inventario/
 │   ├── Models/
 │   │   ├── Product.java
 │   │   ├── Purchase.java
+│   │   ├── AuditRecord.java
 │   │   └── User.java
 │   │
 │   ├── Scenes/
@@ -28,9 +29,12 @@ Sistema Inventario/
 │   │
 │   └── Services/
 │       ├── JsonStorage.java
+│       ├── JsonListService.java
+│       ├── DailyJsonListService.java
+│       ├── AuditService.java
 │       ├── PurchaseService.java
-│       ├── Session.java
-│       └── UserService.java
+│       ├── UserService.java
+│       └── Session.java
 │
 ├── Images/
 │   ├── Shared/
@@ -45,17 +49,16 @@ Sistema Inventario/
     ├── Vendedor/
     │   └── users.json
     │
-    ├── Registro/
-    │   └── DD-MM-AA/           (asi deben estar numerados)
-    │       └── registro.json
-    │
     ├── products.json
     │
-    ├── purchases.json
+    ├── purchases/
+    │   └── Año/
+    │       └── Mes/
+    │           └── Dia.json
     │
-    └── audit.json
-
-
-    [Ubicación privada/secreta fuera de Data]/
-    └── auditoria/
-        └── registro-encriptado.json
+    └── audit/
+        ├── Año/
+        │   └── Mes/
+        │       └── Dia.json
+        │
+        └── Fallos.json
