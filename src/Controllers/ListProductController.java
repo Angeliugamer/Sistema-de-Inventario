@@ -4,6 +4,7 @@ import Models.Product;
 import Services.ProductService;
 import Services.Session;
 import Services.ButtonSound;
+import Services.StockAlertManager;
 
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
@@ -15,6 +16,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.TextAlignment;
+import javafx.scene.layout.StackPane;
+import javafx.application.Platform;
 
 import java.util.HashMap;
 import java.util.List;
@@ -40,6 +43,8 @@ public class ListProductController {
     private final Map<String, Integer> carrito = new HashMap<>();
     private static final PseudoClass IN_CART = PseudoClass.getPseudoClass("in-cart");
 
+    private final StockAlertManager stockAlertManager = new StockAlertManager();
+
     @FXML
     public void initialize() {
         boolean admin = Session.isAdmin();
@@ -64,6 +69,12 @@ public class ListProductController {
                                     : "Cantidad (1 por defecto)"
                     );
                 });
+
+        Platform.runLater(() -> {
+            if (ListProd.getScene() != null && ListProd.getScene().getRoot() instanceof StackPane root) {
+                stockAlertManager.start(root);
+            }
+        });
     }
 
     // CONFIGURAR LA LISTA Y SUS FILAS.
@@ -362,6 +373,8 @@ public class ListProductController {
             ButtonSound.playClick("error");
             mostrarError("No se pudo regresar al Login.");
         }
+
+        stockAlertManager.stop();
     }
 
     // ABRIR VENTANA DE VENTA.
@@ -377,6 +390,8 @@ public class ListProductController {
             ButtonSound.playClick("error");
             mostrarError("No se pudo abrir la ventana de Venta.");
         }
+
+        stockAlertManager.stop();
     }
 
     // ABRIR REGISTRO.
@@ -394,6 +409,8 @@ public class ListProductController {
             ButtonSound.playClick("error");
             mostrarError("No se pudo abrir la ventana de Registro.");
         }
+
+        stockAlertManager.stop();
     }
 
     private void mostrarAviso(String mensaje) {
