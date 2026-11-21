@@ -2,6 +2,7 @@ package Services;
 
 import Models.AuditRecord;
 import Models.Purchase;
+import Models.Product;
 import Models.User;
 
 import com.google.gson.Gson;
@@ -27,8 +28,7 @@ public class AuditService {
             );
 
     // REGISTRAR UN EVENTO
-    public static void record(
-            String action,
+    public static void record(String action,
             String entityType, String entityId,
             String beforeData, String afterData) {
 
@@ -116,5 +116,24 @@ public class AuditService {
     public static List<AuditRecord> getBetween(
             LocalDate start, LocalDate end) {
         return storage.readBetween(start, end);
+    }
+
+    public static void recordProductChange(
+            String action, Product before, Product after) {
+        Product reference = after != null ? after : before;
+
+        if (reference == null) {
+            throw new IllegalArgumentException(
+                    "No se proporcionó un producto."
+            );
+        }
+
+        record(
+                action,
+                "PRODUCTO",
+                reference.getId(),
+                before == null ? null : gson.toJson(before),
+                after == null ? null : gson.toJson(after)
+        );
     }
 }

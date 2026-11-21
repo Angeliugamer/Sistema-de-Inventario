@@ -9,6 +9,7 @@ public class Product implements Identificable, Gestionable {
     private String category;
     private double price;
     private int stock;
+    private boolean active = true;
 
     // 1. Constructor vacío (obligatorio para que Gson lea el JSON)
     public Product() {
@@ -123,4 +124,7 @@ public class Product implements Identificable, Gestionable {
     public String toString() {
         return getResumen();
     }
+
+    public boolean isActive() {return active;}
+    public void setActive(boolean active) {this.active = active;}
 }

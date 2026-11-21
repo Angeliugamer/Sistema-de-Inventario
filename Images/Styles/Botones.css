@@ -23,6 +23,8 @@
     -fx-background-color: #A00A06;
 }
 
+
+
 /* ESTILO TRANSPARENTE */
 .boton-navegacion {
     -fx-background-color: transparent;
@@ -36,9 +38,54 @@
 }
 
 .boton-navegacion:hover {
-    -fx-background-color: rgba(65, 105, 225, 0.30);
+    -fx-background-color: rgb(65 105 225 / 0.3);
 }
 
 .boton-navegacion:pressed {
     -fx-background-color: rgba(255, 255, 255, 0.45);
+}
+
+
+
+/* LISTA DE PRODUCTOS */
+.lista-productos {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.lista-productos .list-cell {
+    -fx-background-color: white;
+    -fx-background-insets: 1 0 1 0;
+    -fx-text-fill: black;
+    -fx-padding: 3 6 3 6;
+}
+
+/* CURSOR ENCIMA */
+.lista-productos .list-cell:hover {
+    -fx-background-color: #DCDCDC;
+}
+
+/* PRODUCTO EN EL CARRITO */
+.lista-productos .list-cell:in-cart {
+    -fx-background-color: #BDE5C5;
+    -fx-text-fill: #183D23;
+}
+
+/* PRODUCTO SELECCIONADO */
+.lista-productos .list-cell:selected {
+    -fx-background-color: #555555;
+    -fx-text-fill: white;
+}
+
+/* SELECCIONADO Y EN EL CARRITO */
+.lista-productos .list-cell:in-cart:selected {
+    -fx-background-color: #555555;
+    -fx-text-fill: white;
+}
+
+/* FILAS VACÍAS */
+.lista-productos .list-cell:empty {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
 }
