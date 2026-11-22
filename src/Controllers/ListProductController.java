@@ -146,9 +146,7 @@ public class ListProductController {
                         )
                 );
 
-                stock.setText(
-                        String.valueOf(producto.getStock())
-                );
+                stock.setText(String.valueOf(producto.getStock()));
 
                 int unidades = carrito.getOrDefault(
                         producto.getId(), 0
@@ -179,7 +177,7 @@ public class ListProductController {
     // CARGAR LOS PRODUCTOS DESDE JSON.
     private void cargarProductos() {
         try {
-            List<Product> productos = ProductService.getAllProducts();
+            List<Product> productos = ProductService.getProducts();
 
             productosFiltrados = new FilteredList<>(
                     FXCollections.observableArrayList(productos),
@@ -192,9 +190,7 @@ public class ListProductController {
         } catch (Exception e) {
             e.printStackTrace();
 
-            mostrarError(
-                    "No se pudieron cargar los productos."
-            );
+            mostrarError("No se pudieron cargar los productos.");
         }
     }
 
@@ -358,11 +354,35 @@ public class ListProductController {
     }
 
     // CONSULTAR EL CARRITO DESDE OTROS MÉTODOS.
-    public Map<String, Integer> getCarrito() {return Map.copyOf(carrito);}
+    public Map<String, Integer> getCarrito() {
+        return Map.copyOf(carrito);
+    }
+
+    @FXML
+    private void openProductManagement() {
+        if (!Session.isAdmin()) {
+            return;
+        }
+
+        stockAlertManager.stop();
+
+        try {
+            AppNavigator.showProductManagement();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            ButtonSound.playClick("error");
+            mostrarError(
+                    "No se pudo abrir la gestión de productos."
+            );
+        }
+    }
 
     // CERRAR SESIÓN.
     @FXML
     private void logout() {
+        stockAlertManager.stop();
+
         Session.logout();
 
         try {
@@ -373,13 +393,13 @@ public class ListProductController {
             ButtonSound.playClick("error");
             mostrarError("No se pudo regresar al Login.");
         }
-
-        stockAlertManager.stop();
     }
 
     // ABRIR VENTANA DE VENTA.
     @FXML
     private void openShop() {
+        stockAlertManager.stop();
+
         ButtonSound.playClick("Caja Registradora");
 
         try {
@@ -390,13 +410,13 @@ public class ListProductController {
             ButtonSound.playClick("error");
             mostrarError("No se pudo abrir la ventana de Venta.");
         }
-
-        stockAlertManager.stop();
     }
 
     // ABRIR REGISTRO.
     @FXML
     private void openRegister() {
+        stockAlertManager.stop();
+
         if (!Session.isAdmin()) {
             return;
         }
@@ -409,8 +429,6 @@ public class ListProductController {
             ButtonSound.playClick("error");
             mostrarError("No se pudo abrir la ventana de Registro.");
         }
-
-        stockAlertManager.stop();
     }
 
     private void mostrarAviso(String mensaje) {

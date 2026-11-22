@@ -42,4 +42,14 @@ public class AppNavigator {
                 new Scene(root, width, height)
         );
     }
+
+    public static void showProductManagement() throws IOException {
+        if (!Services.Session.isAdmin()) {
+            throw new SecurityException(
+                    "Solo un administrador puede gestionar productos."
+            );
+        }
+
+        loadScene("/Scenes/SegundaFase/Registro.fxml", 1280, 720);
+    }
 }

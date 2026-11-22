@@ -24,9 +24,6 @@ import java.util.Queue;
 import java.util.Set;
 
 public class StockAlertManager {
-    // UMBRAL PROVISIONAL DE STOCK.
-    private static final int STOCK_MINIMO = 5;
-
     // DURACIONES DE LA NOTIFICACIÓN.
     private static final double ESPERA_INICIAL = 5;
     private static final double TIEMPO_VISIBLE = 15;
@@ -72,14 +69,16 @@ public class StockAlertManager {
 
     // REVISAR LOS PRODUCTOS CON POCO STOCK.
     private void revisarInventario() {
-        if (detenido) {return;}
+        if (detenido) {
+            return;
+        }
 
         List<Product> productos = ProductService.getProducts();
 
         for (Product producto : productos) {
             String id = producto.getId();
 
-            if (producto.getStock() <= STOCK_MINIMO) {
+            if (producto.getStock() <= producto.getStockMinimo()) {
                 if (!productosNotificados.contains(id)) {
 
                     cola.offer(producto);
@@ -94,9 +93,7 @@ public class StockAlertManager {
                 productosNotificados.remove(id);
                 productosEnCola.remove(id);
 
-                cola.removeIf(
-                        p -> p.getId().equals(id)
-                );
+                cola.removeIf(p -> p.getId().equals(id));
             }
         }
 
@@ -138,8 +135,7 @@ public class StockAlertManager {
                     .findFirst()
                     .orElse(null);
 
-            if (actual == null || actual.getStock() > STOCK_MINIMO) {
-
+            if (actual == null || actual.getStock() > actual.getStockMinimo()) {
                 productosNotificados.remove(producto.getId());
 
                 mostrandoAlerta = false;
@@ -184,8 +180,7 @@ public class StockAlertManager {
             );
         }
 
-        ImageView fondo = new ImageView(new Image(imageURL.toExternalForm())
-        );
+        ImageView fondo = new ImageView(new Image(imageURL.toExternalForm()));
 
         fondo.setFitWidth(380);
         fondo.setFitHeight(115);
@@ -206,23 +201,16 @@ public class StockAlertManager {
                         "-fx-text-fill: #222222;"
         );
 
-        StackPane alerta = new StackPane(
-                fondo, texto
-        );
+        StackPane alerta = new StackPane(fondo, texto);
 
         alerta.setPrefSize(380, 115);
         alerta.setMaxSize(380, 115);
 
         StackPane.setAlignment(texto, Pos.CENTER);
-        StackPane.setMargin(
-                texto, new Insets(5, 35, 5, 55)
-        );
+        StackPane.setMargin(texto, new Insets(5, 35, 5, 55));
 
         StackPane.setAlignment(alerta, Pos.BOTTOM_LEFT);
-
-        StackPane.setMargin(
-                alerta, new Insets(0, 0, 25, 25)
-        );
+        StackPane.setMargin(alerta, new Insets(0, 0, 25, 25));
 
         root.getChildren().add(alerta);
 

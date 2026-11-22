@@ -9,14 +9,18 @@ public class Product implements Identificable, Gestionable {
     private String category;
     private double price;
     private int stock;
+    private int stockMinimo = 5;
     private boolean active = true;
 
     // 1. Constructor vacío (obligatorio para que Gson lea el JSON)
-    public Product() {
+    public Product() {}
+
+    public Product(String id, String name, String category, double price, int stock) {
+        this(id, name, category, price, stock, 5);
     }
 
     // 2. Constructor completo con validaciones
-    public Product(String id, String name, String category, double price, int stock) {
+    public Product(String id, String name, String category, double price, int stock, int stockMinimo) {
         if (id == null || id.isBlank()) {
             throw new IllegalArgumentException("El ID del producto no puede estar vacío.");
         }
@@ -25,6 +29,7 @@ public class Product implements Identificable, Gestionable {
         setCategory(category);
         setPrice(price);
         setStock(stock);
+        setStockMinimo(stockMinimo);
     }
 
     // --- MÉTODOS DE LA INTERFAZ Identificable ---
@@ -33,50 +38,55 @@ public class Product implements Identificable, Gestionable {
         return id;
     }
 
-    // --- GETTERS Y SETTERS CON REGLAS DE VALIDACIÓN ---
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("El nombre del producto es obligatorio.");
         }
+
         this.name = name.trim();
     }
 
     public String getCategory() {
         return category;
     }
-
     public void setCategory(String category) {
-        if (category == null || category.isBlank()) {
-            this.category = "General";
-        } else {
-            this.category = category.trim();
-        }
+        this.category = category == null || category.isBlank()
+                ? "General"
+                : category.trim();
     }
 
     public double getPrice() {
         return price;
     }
-
     public void setPrice(double price) {
-        if (price < 0) {
-            throw new IllegalArgumentException("El precio no puede ser negativo.");
+        if (!Double.isFinite(price) || price < 0) {
+            throw new IllegalArgumentException("El precio debe ser un número válido y no negativo.");
         }
+
         this.price = price;
     }
 
     public int getStock() {
         return stock;
     }
-
     public void setStock(int stock) {
         if (stock < 0) {
             throw new IllegalArgumentException("El stock no puede ser negativo.");
         }
+
         this.stock = stock;
+    }
+
+    public int getStockMinimo() {return stockMinimo;}
+    public void setStockMinimo(int stockMinimo) {
+        if (stockMinimo < 0) {
+            throw new IllegalArgumentException("El stock mínimo no puede ser negativo.");
+        }
+
+        this.stockMinimo = stockMinimo;
     }
 
     // --- REGLAS DE NEGOCIO DEL PRODUCTO ---
@@ -88,9 +98,11 @@ public class Product implements Identificable, Gestionable {
         if (cantidad <= 0) {
             throw new IllegalArgumentException("La cantidad a descontar debe ser mayor a 0.");
         }
+
         if (!tieneStockSuficiente(cantidad)) {
             throw new IllegalStateException("Stock insuficiente para el producto: " + this.name);
         }
+
         this.stock -= cantidad;
     }
 
@@ -98,14 +110,16 @@ public class Product implements Identificable, Gestionable {
         if (cantidad <= 0) {
             throw new IllegalArgumentException("La cantidad a reponer debe ser mayor a 0.");
         }
-        this.stock += cantidad;
+
+        stock = Math.addExact(stock, cantidad);
     }
 
     public double calcularSubtotal(int cantidad) {
         if (cantidad <= 0) {
             throw new IllegalArgumentException("La cantidad debe ser mayor a 0.");
         }
-        return this.price * cantidad; // Corregido: operador de multiplicación añadido
+
+        return price * cantidad;
     }
 
     // --- MÉTODOS DE LA INTERFAZ Gestionable ---
@@ -116,7 +130,7 @@ public class Product implements Identificable, Gestionable {
 
     @Override
     public String getResumen() {
-        return String.format("%s [%s] - $%.2f (Stock: %d)", name, category, price, stock);
+        return String.format("%s [%s] - $%.2f (Stock: %d / Mínimo: %d)", name, category, price, stock, stockMinimo);
     }
 
     // --- REPRESENTACIÓN EN TEXTO PARA JAVAFX (ListView / ComboBox) ---

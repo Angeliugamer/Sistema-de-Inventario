@@ -35,15 +35,26 @@ public class ProductService {
 
         return getProducts()
                 .stream()
-                .filter(p -> p.getName().toLowerCase().contains(text))
+                .filter(p ->
+                        p.getName().toLowerCase().contains(text)
+                                || p.getCategory().toLowerCase().contains(text)
+                                || p.getId().toLowerCase().contains(text)
+                )
                 .toList();
     }
 
     // AGREGAR PRODUCTO
     public static void addProduct(
             String name, String category,
-            double price, int stock) {
+            double price, int stock
+    ) {
+        addProduct(name, category, price, stock, 5);
+    }
 
+
+    public static void addProduct(
+            String name, String category,
+            double price, int stock, int stockMinimo) {
         requireAdmin();
 
         Product product = new Product(
@@ -51,7 +62,8 @@ public class ProductService {
                 name,
                 category,
                 price,
-                stock
+                stock,
+                stockMinimo
         );
 
         storage.add(product);
@@ -85,12 +97,14 @@ public class ProductService {
                 previous.getName(),
                 previous.getCategory(),
                 previous.getPrice(),
-                previous.getStock()
+                previous.getStock(),
+                previous.getStockMinimo()
         );
 
         updated.setActive(previous.isActive());
 
         products.removeIf(p -> p.getId().equals(updated.getId()));
+
         products.add(updated);
 
         JsonStorage.write(
@@ -127,7 +141,8 @@ public class ProductService {
                 product.getName(),
                 product.getCategory(),
                 product.getPrice(),
-                product.getStock()
+                product.getStock(),
+                product.getStockMinimo()
         );
 
         product.setActive(false);
