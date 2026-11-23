@@ -1,10 +1,8 @@
-package Controllers.SegundaFase;
+package Controllers;
 
-import Controllers.AppNavigator;
 import Models.Product;
 import Services.ProductService;
 import Services.Session;
-import Services.ButtonSound;
 
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;

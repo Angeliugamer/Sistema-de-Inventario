@@ -50,6 +50,6 @@ public class AppNavigator {
             );
         }
 
-        loadScene("/Scenes/SegundaFase/Registro.fxml", 1280, 720);
+        loadScene("/Scenes/Registro.fxml", 1280, 720);
     }
 }

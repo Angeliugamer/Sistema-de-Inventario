@@ -38,7 +38,7 @@
 }
 
 .boton-navegacion:hover {
-    -fx-background-color: rgb(65 105 225 / 0.3);
+    -fx-background-color: rgba(65, 105, 225, 0.3);
 }
 
 .boton-navegacion:pressed {
