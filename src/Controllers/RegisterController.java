@@ -253,8 +253,6 @@ public class RegisterController {
     // REGRESAR AL LOGIN
     @FXML
     private void backToLogin() {
-        ButtonSound.playClick();
-
         try {
             AppNavigator.showInventory();
 

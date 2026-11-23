@@ -2,6 +2,7 @@ import Controllers.AppNavigator;
 // import Services.UserService;
 import Services.ButtonSound;
 
+import javafx.scene.image.Image;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -23,7 +24,10 @@ public class Main extends Application {
 
         AppNavigator.setStage(stage);
 
+        Image icon = new Image(getClass().getResourceAsStream("/Icons/Handbag.png"));
+
         stage.setTitle("Sistema Inventario");
+        stage.getIcons().add(icon);
         stage.setResizable(false);
 
         AppNavigator.showLogin();

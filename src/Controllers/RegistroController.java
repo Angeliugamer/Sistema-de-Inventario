@@ -4,11 +4,15 @@ import Models.Product;
 import Services.ProductService;
 import Services.Session;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.Priority;
+import javafx.scene.text.TextAlignment;
 
 import java.util.List;
 import java.util.Locale;
@@ -31,7 +35,7 @@ public class RegistroController {
     public void initialize() {
         if (!Session.isAdmin()) {
             mostrarError("No tienes permisos para gestionar productos.");
-            PlatformBack();
+            Platform.runLater(this::backToProducts);
             return;
         }
 
@@ -48,31 +52,80 @@ public class RegistroController {
     }
 
     // CONFIGURAR LA PRESENTACIÓN DE LOS PRODUCTOS.
+
     private void configurarLista() {
         ListProd.setCellFactory(list -> new ListCell<>() {
+            private final GridPane fila = new GridPane();
+
+            private final Label nombre = new Label();
+            private final Label categoria = new Label();
+            private final Label precio = new Label();
+            private final Label stock = new Label();
+            private final Label minimo = new Label();
+
+            {
+                fila.setHgap(8);
+                fila.setVgap(0);
+
+                double[] porcentajes = {30, 18, 18, 17, 17};
+
+                for (double porcentaje : porcentajes) {
+                    ColumnConstraints columna = new ColumnConstraints();
+                    columna.setPercentWidth(porcentaje);
+                    columna.setHgrow(Priority.ALWAYS);
+                    fila.getColumnConstraints().add(columna);
+                }
+
+                configurarLabel(nombre);
+                configurarLabel(categoria);
+                configurarLabel(precio);
+                configurarLabel(stock);
+                configurarLabel(minimo);
+
+                fila.add(nombre, 0, 0);
+                fila.add(categoria, 1, 0);
+                fila.add(precio, 2, 0);
+                fila.add(stock, 3, 0);
+                fila.add(minimo, 4, 0);
+
+                setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+            }
+
             @Override
             protected void updateItem(Product producto, boolean empty) {
                 super.updateItem(producto, empty);
 
                 if (empty || producto == null) {
+                    setGraphic(null);
                     setText(null);
                     return;
                 }
 
-                setText(
-                        producto.getName()
-                                + "  |  " + producto.getCategory()
-                                + "  |  $" + String.format(
+                nombre.setText(producto.getName());
+                categoria.setText(producto.getCategory());
+
+                precio.setText(
+                        String.format(
                                 Locale.forLanguageTag("es-CO"),
-                                "%,.0f",
+                                "$%,.0f",
                                 producto.getPrice()
                         )
-                                + "  |  Stock: " + producto.getStock()
-                                + "  |  Mínimo: " + producto.getStockMinimo()
                 );
+
+                stock.setText("Stock: " + producto.getStock());
+                minimo.setText("Mínimo: " + producto.getStockMinimo());
+
+                setGraphic(fila);
+            }
+
+            private void configurarLabel(Label label) {
+                label.setMaxWidth(Double.MAX_VALUE);
+                label.setTextAlignment(TextAlignment.LEFT);
+                label.setStyle("-fx-padding: 5 2 5 2;");
             }
         });
     }
+
 
     // CARGAR PRODUCTOS ACTIVOS.
     private void cargarProductos() {
@@ -88,7 +141,6 @@ public class RegistroController {
 
         } catch (Exception e) {
             e.printStackTrace();
-
             mostrarError("No se pudieron cargar los productos.");
         }
     }
@@ -160,20 +212,24 @@ public class RegistroController {
                 );
 
                 cargarProductos();
-
-                mostrarInformacion(
-                        "El producto se guardó correctamente."
-                );
+                mostrarInformacion("El producto se guardó correctamente.");
 
             } catch (Exception e) {
                 e.printStackTrace();
-                mostrarError(e.getMessage());
+                mostrarError(
+                        mensajeError(e, "No se pudo guardar el producto.")
+                );
             }
         });
     }
 
     // EDITAR PRODUCTO SELECCIONADO.
     private void editarProducto() {
+        if (!Session.isAdmin()) {
+            mostrarError("Operación no autorizada.");
+            return;
+        }
+
         Product seleccionado = ListProd.getSelectionModel().getSelectedItem();
 
         if (seleccionado == null) {
@@ -206,7 +262,9 @@ public class RegistroController {
 
             } catch (Exception e) {
                 e.printStackTrace();
-                mostrarError(e.getMessage());
+                mostrarError(
+                        mensajeError(e, "No se pudo modificar el producto.")
+                );
             }
         });
     }
@@ -231,10 +289,17 @@ public class RegistroController {
         confirmacion.setTitle("Desactivar producto");
         confirmacion.setHeaderText("¿Deseas desactivar " + seleccionado.getName() + "?");
 
-        confirmacion.setContentText(
+        Label mensaje = new Label(
                 "El producto dejará de aparecer en el inventario, "
                         + "pero sus datos y su historial de auditoría se conservarán."
         );
+
+        mensaje.setWrapText(true);
+        mensaje.setPrefWidth(380);
+        mensaje.setMaxWidth(380);
+
+        confirmacion.getDialogPane().setContent(mensaje);
+        confirmacion.getDialogPane().setPrefWidth(460);
 
         Optional<ButtonType> respuesta = confirmacion.showAndWait();
 
@@ -253,7 +318,9 @@ public class RegistroController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            mostrarError(e.getMessage());
+            mostrarError(
+                    mensajeError(e, "No se pudo desactivar el producto.")
+            );
         }
     }
 
@@ -343,7 +410,6 @@ public class RegistroController {
                     try {
                         validarFormulario(
                                 nombre.getText(),
-                                categoria.getText(),
                                 precio.getText(),
                                 stock.getText(),
                                 stockMinimo.getText()
@@ -375,7 +441,7 @@ public class RegistroController {
 
     // VALIDAR LOS DATOS DEL FORMULARIO.
     private void validarFormulario(
-            String nombre, String categoria, String precio,
+            String nombre, String precio,
             String stock, String stockMinimo
     ) {
         if (nombre == null || nombre.isBlank()) {
@@ -384,12 +450,20 @@ public class RegistroController {
             );
         }
 
+        if (precio == null || precio.isBlank()
+                || stock == null || stock.isBlank()
+                || stockMinimo == null || stockMinimo.isBlank()) {
+            throw new IllegalArgumentException(
+                    "Debes completar el precio, el stock y el stock mínimo."
+            );
+        }
+
         try {
             double valorPrecio = Double.parseDouble(precio.trim());
 
             if (!Double.isFinite(valorPrecio) || valorPrecio < 0) {
                 throw new IllegalArgumentException(
-                        "El precio debe ser válido y no negativo."
+                        "El precio debe ser un número válido y no negativo."
                 );
             }
 
@@ -398,7 +472,7 @@ public class RegistroController {
 
             if (valorStock < 0 || valorMinimo < 0) {
                 throw new IllegalArgumentException(
-                        "El stock y el mínimo no pueden ser negativos."
+                        "El stock y el stock mínimo no pueden ser negativos."
                 );
             }
 
@@ -412,10 +486,6 @@ public class RegistroController {
     // REGRESAR AL INVENTARIO.
     @FXML
     private void backToProducts() {
-        PlatformBack();
-    }
-
-    private void PlatformBack() {
         try {
             AppNavigator.showInventory();
 
@@ -439,6 +509,15 @@ public class RegistroController {
         }
     }
 
+    // OBTENER UN MENSAJE DE ERROR LEGIBLE.
+    private String mensajeError(Exception e, String predeterminado) {
+        String mensaje = e.getMessage();
+
+        return mensaje == null || mensaje.isBlank()
+                ? predeterminado
+                : mensaje;
+    }
+
     private void mostrarAviso(String mensaje) {
         new Alert(
                 Alert.AlertType.WARNING, mensaje
@@ -447,8 +526,7 @@ public class RegistroController {
 
     private void mostrarError(String mensaje) {
         new Alert(
-                Alert.AlertType.ERROR,
-                mensaje == null ? "Ocurrió un error inesperado." : mensaje
+                Alert.AlertType.ERROR, mensaje
         ).showAndWait();
     }
 
