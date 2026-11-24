@@ -1,6 +1,7 @@
 package Controllers;
 
 import Models.Product;
+import Services.CategoryService;
 import Services.ProductService;
 import Services.Session;
 
@@ -28,6 +29,7 @@ public class RegistroController {
     @FXML private Button BtnBusqueda;
     @FXML private Button BtnAgregar;
     @FXML private Button BtnEliminar;
+    @FXML private Button BtnCrearCategoria;
 
     private FilteredList<Product> productosFiltrados;
 
@@ -42,17 +44,9 @@ public class RegistroController {
         configurarLista();
         configurarBusqueda();
         cargarProductos();
-
-        // Doble clic para modificar.
-        ListProd.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) {
-                editarProducto();
-            }
-        });
     }
 
     // CONFIGURAR LA PRESENTACIÓN DE LOS PRODUCTOS.
-
     private void configurarLista() {
         ListProd.setCellFactory(list -> new ListCell<>() {
             private final GridPane fila = new GridPane();
@@ -104,13 +98,9 @@ public class RegistroController {
                 nombre.setText(producto.getName());
                 categoria.setText(producto.getCategory());
 
-                precio.setText(
-                        String.format(
-                                Locale.forLanguageTag("es-CO"),
-                                "$%,.0f",
-                                producto.getPrice()
-                        )
-                );
+                precio.setText(String.format(
+                        Locale.forLanguageTag("es-CO"), "$%,.0f", producto.getPrice()
+                ));
 
                 stock.setText("Stock: " + producto.getStock());
                 minimo.setText("Mínimo: " + producto.getStockMinimo());
@@ -124,16 +114,20 @@ public class RegistroController {
                 label.setStyle("-fx-padding: 5 2 5 2;");
             }
         });
+
+        ListProd.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                editarProducto();
+            }
+        });
     }
 
 
     // CARGAR PRODUCTOS ACTIVOS.
     private void cargarProductos() {
         try {
-            List<Product> productos = ProductService.getProducts();
-
             productosFiltrados = new FilteredList<>(
-                    FXCollections.observableArrayList(productos),
+                    FXCollections.observableArrayList(ProductService.getProducts()),
                     producto -> true
             );
 
@@ -167,22 +161,33 @@ public class RegistroController {
                 ? ""
                 : texto.trim().toLowerCase(Locale.ROOT);
 
-        productosFiltrados.setPredicate(producto -> {
-            if (busqueda.isEmpty()) {
-                return true;
+        productosFiltrados.setPredicate(producto -> busqueda.isEmpty()
+                || producto.getName().toLowerCase(Locale.ROOT).contains(busqueda)
+                || producto.getCategory().toLowerCase(Locale.ROOT).contains(busqueda)
+                || producto.getId().toLowerCase(Locale.ROOT).contains(busqueda));
+    }
+
+    // CREAR CATEGORÍA NUEVA.
+    @FXML
+    private void crearCategoria() {
+        if (!Session.isAdmin()) {
+            mostrarError("Operación no autorizada.");
+            return;
+        }
+
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Crear categoría");
+        dialog.setHeaderText("Añadir una categoría al catálogo");
+        dialog.setContentText("Nombre de la categoría:");
+        dialog.showAndWait().ifPresent(nombre -> {
+            try {
+                String creada = CategoryService.addCategory(nombre);
+                mostrarInformacion("La categoría \"" + creada + "\" se creó correctamente.");
+            } catch (Exception e) {
+                mostrarAviso(e.getMessage() == null
+                        ? "No se pudo crear la categoría."
+                        : e.getMessage());
             }
-
-            return producto.getName()
-                    .toLowerCase(Locale.ROOT)
-                    .contains(busqueda)
-
-                    || producto.getCategory()
-                    .toLowerCase(Locale.ROOT)
-                    .contains(busqueda)
-
-                    || producto.getId()
-                    .toLowerCase(Locale.ROOT)
-                    .contains(busqueda);
         });
     }
 
@@ -194,31 +199,24 @@ public class RegistroController {
             return;
         }
 
-        Dialog<ProductData> dialog = crearFormulario(
-                "Agregar producto",
-                null
-        );
+        if (CategoryService.getCategories().isEmpty()) {
+            mostrarAviso("Primero debes crear al menos una categoría.");
+            return;
+        }
 
-        Optional<ProductData> resultado = dialog.showAndWait();
+        Optional<ProductData> resultado = crearFormulario(
+                "Agregar producto", null
+        ).showAndWait();
 
         resultado.ifPresent(data -> {
             try {
-                ProductService.addProduct(
-                        data.nombre(),
-                        data.categoria(),
-                        data.precio(),
-                        data.stock(),
-                        data.stockMinimo()
-                );
-
+                ProductService.addProduct(data.nombre(), data.categoria(),
+                        data.precio(), data.stock(), data.stockMinimo());
                 cargarProductos();
                 mostrarInformacion("El producto se guardó correctamente.");
-
             } catch (Exception e) {
                 e.printStackTrace();
-                mostrarError(
-                        mensajeError(e, "No se pudo guardar el producto.")
-                );
+                mostrarError(mensajeError(e, "No se pudo guardar el producto."));
             }
         });
     }
@@ -236,35 +234,23 @@ public class RegistroController {
             return;
         }
 
-        Dialog<ProductData> dialog = crearFormulario(
+        Optional<ProductData> resultado = crearFormulario(
                 "Modificar producto",
                 seleccionado
-        );
-
-        Optional<ProductData> resultado = dialog.showAndWait();
+        ).showAndWait();
 
         resultado.ifPresent(data -> {
             try {
                 Product actualizado = new Product(
-                        seleccionado.getId(),
-                        data.nombre(),
-                        data.categoria(),
-                        data.precio(),
-                        data.stock(),
-                        data.stockMinimo()
+                        seleccionado.getId(), data.nombre(), data.categoria(),
+                        data.precio(), data.stock(), data.stockMinimo()
                 );
-
                 ProductService.updateProduct(actualizado);
-
                 cargarProductos();
-
                 mostrarInformacion("El producto se modificó correctamente.");
-
             } catch (Exception e) {
                 e.printStackTrace();
-                mostrarError(
-                        mensajeError(e, "No se pudo modificar el producto.")
-                );
+                mostrarError(mensajeError(e, "No se pudo modificar el producto."));
             }
         });
     }
@@ -308,71 +294,60 @@ public class RegistroController {
         }
 
         try {
-            ProductService.deactivateProduct(
-                    seleccionado.getId()
-            );
-
+            ProductService.deactivateProduct(seleccionado.getId());
             cargarProductos();
-
             mostrarInformacion("El producto fue desactivado correctamente.");
 
         } catch (Exception e) {
             e.printStackTrace();
-            mostrarError(
-                    mensajeError(e, "No se pudo desactivar el producto.")
-            );
+            mostrarError(mensajeError(e, "No se pudo desactivar el producto."));
         }
     }
 
     // FORMULARIO REUTILIZABLE PARA CREAR Y MODIFICAR.
-    private Dialog<ProductData> crearFormulario(
-            String titulo, Product producto
-    ) {
+    private Dialog<ProductData> crearFormulario(String titulo, Product producto) {
         Dialog<ProductData> dialog = new Dialog<>();
 
         dialog.setTitle(titulo);
-        dialog.setHeaderText(
-                producto == null
-                        ? "Introduce los datos del nuevo producto."
-                        : "Modifica los datos del producto seleccionado."
+        dialog.setHeaderText(producto == null
+                ? "Introduce los datos del nuevo producto."
+                : "Modifica los datos del producto seleccionado."
         );
 
-        ButtonType guardar = new ButtonType(
-                "Guardar", ButtonBar.ButtonData.OK_DONE
-        );
-
-        dialog.getDialogPane().getButtonTypes().addAll(
-                guardar, ButtonType.CANCEL
-        );
+        ButtonType guardar = new ButtonType("Guardar", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(guardar, ButtonType.CANCEL);
 
         TextField nombre = new TextField(
                 producto == null ? "" : producto.getName()
         );
 
-        TextField categoria = new TextField(
-                producto == null ? "" : producto.getCategory()
+        ComboBox<String> categoria = new ComboBox<>(
+                FXCollections.observableArrayList(CategoryService.getCategories())
         );
 
-        TextField precio = new TextField(
-                producto == null
-                        ? ""
-                        : String.valueOf(producto.getPrice())
+        categoria.setPromptText("Selecciona una categoría");
+        categoria.setMaxWidth(Double.MAX_VALUE);
+
+        if (producto != null) {
+            categoria.setValue(CategoryService.resolveCategory(producto.getCategory()));
+        }
+
+        TextField precio = new TextField(producto == null
+                ? ""
+                : String.valueOf(producto.getPrice())
         );
 
-        TextField stock = new TextField(
-                producto == null
-                        ? ""
-                        : String.valueOf(producto.getStock())
+        TextField stock = new TextField(producto == null
+                ? ""
+                : String.valueOf(producto.getStock())
         );
 
-        TextField stockMinimo = new TextField(
-                producto == null
-                        ? "5"
-                        : String.valueOf(producto.getStockMinimo())
+        TextField stockMinimo = new TextField(producto == null
+                ? "5"
+                : String.valueOf(producto.getStockMinimo())
         );
 
         nombre.setPromptText("Nombre del producto");
-        categoria.setPromptText("Categoría");
         precio.setPromptText("Precio");
         stock.setPromptText("Unidades disponibles");
         stockMinimo.setPromptText("Umbral de alerta");
@@ -385,16 +360,12 @@ public class RegistroController {
 
         contenido.add(new Label("Nombre:"), 0, 0);
         contenido.add(nombre, 1, 0);
-
         contenido.add(new Label("Categoría:"), 0, 1);
         contenido.add(categoria, 1, 1);
-
         contenido.add(new Label("Precio:"), 0, 2);
         contenido.add(precio, 1, 2);
-
         contenido.add(new Label("Stock:"), 0, 3);
         contenido.add(stock, 1, 3);
-
         contenido.add(new Label("Stock mínimo:"), 0, 4);
         contenido.add(stockMinimo, 1, 4);
 
@@ -404,22 +375,20 @@ public class RegistroController {
         Button botonGuardar = (Button) dialog.getDialogPane()
                 .lookupButton(guardar);
 
-        botonGuardar.addEventFilter(
-                javafx.event.ActionEvent.ACTION,
-                event -> {
-                    try {
-                        validarFormulario(
-                                nombre.getText(),
-                                precio.getText(),
-                                stock.getText(),
-                                stockMinimo.getText()
-                        );
-
-                    } catch (IllegalArgumentException e) {
-                        event.consume();
-                        mostrarAviso(e.getMessage());
-                    }
-                }
+        botonGuardar.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
+            try {
+                validarFormulario(
+                        nombre.getText(),
+                        categoria.getValue(),
+                        precio.getText(),
+                        stock.getText(),
+                        stockMinimo.getText()
+                );
+            } catch (IllegalArgumentException e) {
+                event.consume();
+                mostrarAviso(e.getMessage());
+            }
+        }
         );
 
         dialog.setResultConverter(button -> {
@@ -428,8 +397,7 @@ public class RegistroController {
             }
 
             return new ProductData(
-                    nombre.getText().trim(),
-                    categoria.getText().trim(),
+                    nombre.getText().trim(), categoria.getValue(),
                     Double.parseDouble(precio.getText().trim()),
                     Integer.parseInt(stock.getText().trim()),
                     Integer.parseInt(stockMinimo.getText().trim())
@@ -440,18 +408,17 @@ public class RegistroController {
     }
 
     // VALIDAR LOS DATOS DEL FORMULARIO.
-    private void validarFormulario(
-            String nombre, String precio,
-            String stock, String stockMinimo
-    ) {
+    private void validarFormulario(String nombre, String categoria,
+                                   String precio, String stock, String stockMinimo) {
         if (nombre == null || nombre.isBlank()) {
-            throw new IllegalArgumentException(
-                    "El nombre del producto es obligatorio."
-            );
+            throw new IllegalArgumentException("El nombre del producto es obligatorio.");
         }
 
-        if (precio == null || precio.isBlank()
-                || stock == null || stock.isBlank()
+        if (categoria == null || categoria.isBlank()) {
+            throw new IllegalArgumentException("Selecciona una categoría.");
+        }
+
+        if (precio == null || precio.isBlank() || stock == null || stock.isBlank()
                 || stockMinimo == null || stockMinimo.isBlank()) {
             throw new IllegalArgumentException(
                     "Debes completar el precio, el stock y el stock mínimo."
@@ -519,25 +486,18 @@ public class RegistroController {
     }
 
     private void mostrarAviso(String mensaje) {
-        new Alert(
-                Alert.AlertType.WARNING, mensaje
-        ).showAndWait();
+        new Alert(Alert.AlertType.WARNING, mensaje).showAndWait();
     }
 
     private void mostrarError(String mensaje) {
-        new Alert(
-                Alert.AlertType.ERROR, mensaje
-        ).showAndWait();
+        new Alert(Alert.AlertType.ERROR, mensaje).showAndWait();
     }
 
     private void mostrarInformacion(String mensaje) {
-        new Alert(
-                Alert.AlertType.INFORMATION, mensaje
-        ).showAndWait();
+        new Alert(Alert.AlertType.INFORMATION, mensaje).showAndWait();
     }
 
-    private record ProductData(
-            String nombre, String categoria, double precio,
-            int stock, int stockMinimo
-    ) {}
+    private record ProductData(String nombre, String categoria, double precio,
+            int stock, int stockMinimo) {
+    }
 }

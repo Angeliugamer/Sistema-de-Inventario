@@ -2,9 +2,8 @@ package Services;
 
 import Models.Product;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 public class ProductService {
@@ -38,9 +37,9 @@ public class ProductService {
         return getProducts()
                 .stream()
                 .filter(p ->
-                        p.getName().toLowerCase().contains(text)
-                                || p.getCategory().toLowerCase().contains(text)
-                                || p.getId().toLowerCase().contains(text)
+                        p.getName().toLowerCase(java.util.Locale.ROOT).contains(text)
+                                || p.getCategory().toLowerCase(java.util.Locale.ROOT).contains(text)
+                                || p.getId().toLowerCase(java.util.Locale.ROOT).contains(text)
                 )
                 .toList();
     }
@@ -52,7 +51,6 @@ public class ProductService {
     ) {
         addProduct(name, category, price, stock, 5);
     }
-
 
     public static void addProduct(
             String name, String category,
@@ -80,12 +78,10 @@ public class ProductService {
         requireAdmin();
 
         if (updated == null || updated.getId() == null) {
-            throw new IllegalArgumentException(
-                    "Producto no válido."
-            );
+            throw new IllegalArgumentException("Producto no válido.");
         }
 
-        List<Product> products = storage.readAll();
+        List<Product> products = new ArrayList<>(storage.readAll());
 
         Product previous = products.stream()
                 .filter(p -> p.getId().equals(updated.getId()))
@@ -94,36 +90,49 @@ public class ProductService {
                         "El producto no existe."
                 ));
 
-        Product before = new Product(
-                previous.getId(),
-                previous.getName(),
-                previous.getCategory(),
-                previous.getPrice(),
-                previous.getStock(),
-                previous.getStockMinimo()
-        );
-
+        Product before = copy(previous);
         updated.setActive(previous.isActive());
 
         products.removeIf(p -> p.getId().equals(updated.getId()));
-
         products.add(updated);
 
-        JsonStorage.write(
-                JsonStorage.getProductsFile(),
-                products
-        );
+        JsonStorage.write(JsonStorage.getProductsFile(), products);
+        AuditService.recordProductChange("MODIFICAR", before, updated);
+    }
 
-        AuditService.recordProductChange(
-                "MODIFICAR", before, updated
-        );
+    // REABASTECER: aumenta el stock sin crear ni reemplazar el producto.
+    public static void replenishStock(String productId, int quantity) {
+        requireAdmin();
+
+        if (productId == null || productId.isBlank()) {
+            throw new IllegalArgumentException("Selecciona un producto válido.");
+        }
+        if (quantity <= 0) {
+            throw new IllegalArgumentException(
+                    "La cantidad a reponer debe ser mayor que cero."
+            );
+        }
+
+        List<Product> products = new ArrayList<>(storage.readAll());
+        Product product = products.stream()
+                .filter(p -> p.getId().equals(productId) && p.isActive())
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "El producto no existe o está desactivado."
+                ));
+
+        Product before = copy(product);
+        product.reponerStock(quantity);
+
+        JsonStorage.write(JsonStorage.getProductsFile(), products);
+        AuditService.recordProductChange("REABASTECER", before, product);
     }
 
     // ELIMINACIÓN LÓGICA
     public static void deactivateProduct(String id) {
         requireAdmin();
 
-        List<Product> products = storage.readAll();
+        List<Product> products = new ArrayList<>(storage.readAll());
 
         Product product = products.stream()
                 .filter(p -> p.getId().equals(id))
@@ -133,12 +142,18 @@ public class ProductService {
                 ));
 
         if (!product.isActive()) {
-            throw new IllegalStateException(
-                    "El producto ya está desactivado."
-            );
+            throw new IllegalStateException("El producto ya está desactivado.");
         }
 
-        Product before = new Product(
+        Product before = copy(product);
+        product.setActive(false);
+
+        JsonStorage.write(JsonStorage.getProductsFile(), products);
+        AuditService.recordProductChange("ELIMINAR", before, product);
+    }
+
+    private static Product copy(Product product) {
+        Product copy = new Product(
                 product.getId(),
                 product.getName(),
                 product.getCategory(),
@@ -146,17 +161,8 @@ public class ProductService {
                 product.getStock(),
                 product.getStockMinimo()
         );
-
-        product.setActive(false);
-
-        JsonStorage.write(
-                JsonStorage.getProductsFile(),
-                products
-        );
-
-        AuditService.recordProductChange(
-                "ELIMINAR", before, product
-        );
+        copy.setActive(product.isActive());
+        return copy;
     }
 
     // COMPROBAR PERMISOS

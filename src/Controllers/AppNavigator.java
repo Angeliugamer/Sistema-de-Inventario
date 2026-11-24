@@ -30,6 +30,15 @@ public class AppNavigator {
         loadScene("/Scenes/Venta.fxml", 1280, 720);
     }
 
+    public static void showReabastecimiento() throws IOException {
+        if (!Services.Session.isAdmin()) {
+            throw new SecurityException(
+                    "Solo un administrador puede reabastecer productos."
+            );
+        }
+        loadScene("/Scenes/Reabastecimiento.fxml", 1280, 720);
+    }
+
     private static void loadScene(
             String path, double width, double height)
             throws IOException {
@@ -38,9 +47,7 @@ public class AppNavigator {
                 AppNavigator.class.getResource(path)
         );
 
-        primaryStage.setScene(
-                new Scene(root, width, height)
-        );
+        primaryStage.setScene(new Scene(root, width, height));
     }
 
     public static void showProductManagement() throws IOException {

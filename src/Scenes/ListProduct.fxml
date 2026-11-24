@@ -35,10 +35,6 @@
                <image><Image url="@../Icons/UserCircle.png" /></image>
                <effect><ColorAdjust brightness="1.0" /></effect>
             </ImageView>
-            <ImageView fitHeight="60.0" fitWidth="63.0" layoutX="1190.0" layoutY="580.0" pickOnBounds="true" preserveRatio="true">
-               <image><Image url="@../Icons/GearSix.png" /></image>
-               <effect><ColorAdjust brightness="1.0" /></effect>
-            </ImageView>
          </children>
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0">
@@ -48,16 +44,18 @@
 
             <GridPane hgap="8" layoutX="61.0" layoutY="122.0" prefHeight="25.0" prefWidth="866.0">
                <columnConstraints>
-                  <ColumnConstraints percentWidth="48" />
+                  <ColumnConstraints percentWidth="32" />
+                  <ColumnConstraints percentWidth="20" />
                   <ColumnConstraints percentWidth="18" />
-                  <ColumnConstraints percentWidth="16" />
-                  <ColumnConstraints percentWidth="18" />
+                  <ColumnConstraints percentWidth="15" />
+                  <ColumnConstraints percentWidth="15" />
                </columnConstraints>
 
                <Label text="PRODUCTO" GridPane.columnIndex="0" />
-               <Label text="PRECIO" GridPane.columnIndex="1" />
-               <Label text="STOCK" GridPane.columnIndex="2" />
-               <Label text="CANT." GridPane.columnIndex="3" />
+               <Label text="CATEGORÍA" GridPane.columnIndex="1" />
+               <Label text="PRECIO" GridPane.columnIndex="2" />
+               <Label text="STOCK" GridPane.columnIndex="3" />
+               <Label text="CANT." GridPane.columnIndex="4" />
                <rowConstraints>
                   <RowConstraints />
                </rowConstraints>
@@ -87,8 +85,9 @@
                <font><Font name="Arial" size="12.0" /></font>
             </Button>
 
-            <Button fx:id="Alerts" layoutX="1190.0" layoutY="580.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="60.0" styleClass="boton-navegacion" />
-
+            <Button fx:id="Reabastecer" layoutX="1000.0" layoutY="420.0" mnemonicParsing="false" onAction="#openReplenishment" prefHeight="40.0" prefWidth="150.0" styleClass="boton-naranja" text="Reabastecer">
+               <font><Font name="Arial" size="14.0" /></font>
+            </Button>
             <Button fx:id="AñadirProd" layoutX="1000.0" layoutY="480.0" mnemonicParsing="false" onAction="#openProductManagement" prefHeight="40.0" prefWidth="150.0" styleClass="boton-naranja" text="Añadir Productos">
                <font><Font name="Arial" size="14.0" /></font>
             </Button>

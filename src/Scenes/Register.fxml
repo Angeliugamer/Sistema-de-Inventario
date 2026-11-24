@@ -40,7 +40,7 @@
             </ImageView>
             <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="265.0" layoutY="210.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../Icons/Image.png" />
+                  <Image url="@../Icons/Handbag.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="96.0" fitWidth="108.0" layoutX="924.0" layoutY="150.0" pickOnBounds="true" preserveRatio="true">
@@ -52,14 +52,14 @@
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0">
          <children>
+            <Label layoutX="165.0" layoutY="366.0" prefWidth="350.0" text="Hola querido usuario, soy yo, el programador principal, he creado este programa para facilitar tu trabajo, espero te sirva" textAlignment="CENTER" wrapText="true">
+               <font>
+                  <Font name="Arial Bold" size="16.0" />
+               </font>
+            </Label>
             <Label layoutX="853.0" layoutY="230.0" text="Registro">
                <font>
                   <Font name="Arial" size="64.0" />
-               </font>
-            </Label>
-            <Label layoutX="185.0" layoutY="366.0" prefWidth="330.0" text="no se que poner aqui acbksjbksjbvksjbvksvjbskj bsjk vbsjvbskbvskjb ksjbcvksbcvk jsbvksjbv kjsbcvkjsbvkjsbkvjbsjv" wrapText="true">
-               <font>
-                  <Font name="Arial" size="16.0" />
                </font>
             </Label>
             <Label layoutX="773.0" layoutY="300.0" text="Usuario">

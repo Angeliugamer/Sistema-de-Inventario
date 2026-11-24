@@ -56,6 +56,9 @@
             <Button fx:id="BtnEliminar" layoutX="1101.0" layoutY="214.0" mnemonicParsing="false" onAction="#eliminarProducto" styleClass="boton-naranja" text="Eliminar">
                <font><Font name="Arial" size="12.0" /></font>
             </Button>
+            <Button fx:id="BtnCrearCategoria" layoutX="994.0" layoutY="270.0" mnemonicParsing="false" onAction="#crearCategoria" prefHeight="32.0" prefWidth="190.0" styleClass="boton-naranja" text="Crear categoría">
+               <font><Font name="Arial" size="12.0" /></font>
+            </Button>
          </children>
       </Pane>
    </children>
