@@ -6,6 +6,7 @@ import Services.ProductService;
 import Services.Session;
 import Services.ButtonSound;
 import Services.StockAlertManager;
+import Services.CartSession;
 
 import Components.ProductListCell;
 
@@ -41,7 +42,7 @@ public class ListProductController {
     private FilteredList<Product> productosFiltrados;
 
     // ID del producto -> cantidad temporal en el carrito.
-    private final Map<String, Integer> carrito = new HashMap<>();
+    private final Map<String, Integer> carrito = new HashMap<>(CartSession.getItems());
     private final StockAlertManager stockAlertManager = new StockAlertManager();
 
     @FXML
@@ -187,6 +188,7 @@ public class ListProductController {
             }
 
             carrito.put(producto.getId(), updated);
+            CartSession.setQuantity(producto.getId(), updated);
 
             ListProd.refresh();
             Cantidad.clear();
@@ -230,6 +232,8 @@ public class ListProductController {
             } else {
                 carrito.put(producto.getId(), updated);
             }
+
+            CartSession.setQuantity(producto.getId(), updated);
 
             ListProd.refresh();
             Cantidad.clear();

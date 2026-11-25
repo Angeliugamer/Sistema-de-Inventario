@@ -82,6 +82,44 @@ public class DailyJsonListService<T extends Identificable> {
         }
     }
 
+    // REGISTRAR VARIOS ELEMENTOS EN UNA SOLA ESCRITURA.
+    public void addAll(List<T> items) {
+        if (items == null || items.isEmpty()) {
+            throw new IllegalArgumentException("No hay registros para guardar.");
+        }
+
+        synchronized (JsonStorage.class) {
+            LocalDate date = dateExtractor.apply(items.get(0));
+
+            if (date == null) {
+                throw new IllegalArgumentException("La fecha del registro no es válida.");
+            }
+
+            for (T item : items) {
+                if (item == null || item.getId() == null || item.getId().isBlank() || !date.equals(dateExtractor.apply(item))) {
+                    throw new IllegalArgumentException("Los registros deben tener IDs y fechas válidas.");
+                }
+            }
+
+            Path file = getFile(date);
+            List<T> data = new ArrayList<>(JsonStorage.read(file, listType));
+
+            for (T item : items) {
+                boolean exists = data.stream().anyMatch(existing ->
+                        existing.getId().equals(item.getId())
+                );
+
+                if (exists) {
+                    throw new IllegalArgumentException("Ya existe un registro con ese ID.");
+                }
+
+                data.add(item);
+            }
+
+            JsonStorage.write(file, data);
+        }
+    }
+
     // LEER UN DÍA CONCRETO
     public List<T> readByDate(LocalDate date) {
         if (date == null) {

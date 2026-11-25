@@ -30,6 +30,14 @@ public class AppNavigator {
         loadScene("/Scenes/Venta.fxml", 1280, 720);
     }
 
+    public static void showHistory() throws IOException {
+        if (!Services.Session.isAdmin()) {
+            throw new SecurityException("Solo un administrador puede consultar el historial.");
+        }
+
+        loadScene("/Scenes/History.fxml", 1280, 720);
+    }
+
     public static void showReabastecimiento() throws IOException {
         if (!Services.Session.isAdmin()) {
             throw new SecurityException(

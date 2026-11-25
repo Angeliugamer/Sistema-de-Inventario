@@ -52,6 +52,29 @@ public class PurchaseService {
         );
     }
 
+    // REGISTRAR VARIOS PRODUCTOS DE UNA MISMA VENTA.
+    public static void addPurchases(List<Purchase> purchases) {
+        if (!Session.isLoggedIn()) {
+            throw new IllegalStateException("No hay ningún usuario conectado.");
+        }
+
+        if (purchases == null || purchases.isEmpty()) {
+            throw new IllegalArgumentException("La venta no contiene productos.");
+        }
+
+        for (Purchase purchase : purchases) {
+            if (purchase == null || !Session.getCurrentUserId().equals(purchase.getUserId())) {
+                throw new IllegalArgumentException("Los datos de la venta no son válidos.");
+            }
+        }
+
+        storage.addAll(purchases);
+
+        for (Purchase purchase : purchases) {
+            AuditService.recordPurchaseChange("CREAR", null, purchase);
+        }
+    }
+
     // CONSULTAR LAS COMPRAS DEL USUARIO ACTUAL
     public static List<Purchase> getUserPurchases() {
         String userId = Session.getCurrentUserId();
