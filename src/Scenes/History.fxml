@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="720.0" prefWidth="1280.0"
+            xmlns="http://javafx.com/javafx/26"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Controllers.HistoryController">
+    <VBox spacing="16.0"
+          AnchorPane.bottomAnchor="24.0"
+          AnchorPane.leftAnchor="32.0"
+          AnchorPane.rightAnchor="32.0"
+          AnchorPane.topAnchor="24.0">
+        <HBox alignment="CENTER_LEFT" spacing="16.0">
+            <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Historial de Ventas"/>
+            <HBox HBox.hgrow="ALWAYS"/>
+            <Button fx:id="Back" mnemonicParsing="false" onAction="#backToProducts" text="Inventario"/>
+            <Button fx:id="Out" mnemonicParsing="false" onAction="#logout" text="Cerrar sesión"/>
+        </HBox>
+
+        <HBox alignment="CENTER_LEFT" spacing="12.0">
+            <Label text="Fecha:"/>
+            <DatePicker fx:id="DateFilter" onAction="#buscarPorFecha"/>
+            <Button fx:id="BtnBuscar" mnemonicParsing="false" onAction="#buscarPorFecha" text="Consultar"/>
+            <HBox HBox.hgrow="ALWAYS"/>
+            <Label fx:id="TotalDiaLabel" style="-fx-font-size: 16px; -fx-font-weight: bold;"
+                   text="Total del día: $0"/>
+        </HBox>
+
+        <TableView fx:id="TablaVentas" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="ColProducto" prefWidth="360.0" text="Producto"/>
+                <TableColumn fx:id="ColCantidad" prefWidth="140.0" text="Cantidad"/>
+                <TableColumn fx:id="ColTotal" prefWidth="220.0" text="Total"/>
+                <TableColumn fx:id="ColUsuario" prefWidth="240.0" text="Usuario ID"/>
+                <TableColumn fx:id="ColFecha" prefWidth="250.0" text="Fecha / Hora"/>
+            </columns>
+        </TableView>
+    </VBox>
+</AnchorPane>
