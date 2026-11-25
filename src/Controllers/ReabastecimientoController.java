@@ -1,8 +1,11 @@
 package Controllers;
 
 import Models.Product;
+
 import Services.ProductService;
 import Services.Session;
+
+import Components.ProductListCell;
 
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
@@ -10,7 +13,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
@@ -42,50 +44,13 @@ public class ReabastecimientoController {
         cargarProductos();
     }
 
+
     private void configurarLista() {
-        ListProd.setCellFactory(list -> new ListCell<>() {
-            {
-                setOnMouseEntered(event -> {
-                    if (!isEmpty()) {
-                        setStyle("-fx-background-color: #D3D3D3; -fx-text-fill: black;");
-                    }
-                });
-
-                setOnMouseExited(event -> actualizarEstilo(getItem()));
-            }
-
-            @Override
-            protected void updateItem(Product producto, boolean empty) {
-                super.updateItem(producto, empty);
-
-                if (empty || producto == null) {
-                    setText(null);
-                    setStyle("");
-                    return;
-                }
-
-                setText(producto.getName()
-                        + "  |  " + producto.getCategory()
-                        + "  |  Stock: " + producto.getStock()
-                        + "  |  Mínimo: " + producto.getStockMinimo());
-
-                actualizarEstilo(producto);
-            }
-
-            private void actualizarEstilo(Product producto) {
-                if (producto == null) {
-                    setStyle("");
-                } else if (isHover()) {
-                    setStyle("-fx-background-color: #D3D3D3; -fx-text-fill: black;");
-                } else if (producto.getStock() == 0) {
-                    setStyle("-fx-background-color: #F4CCCC; -fx-text-fill: black;");
-                } else if (producto.getStock() <= producto.getStockMinimo()) {
-                    setStyle("-fx-background-color: #FFF2CC; -fx-text-fill: black;");
-                } else {
-                    setStyle("-fx-background-color: white; -fx-text-fill: black;");
-                }
-            }
-        });
+        ListProd.setCellFactory(list ->
+                new ProductListCell(
+                        ProductListCell.Mode.REPLENISHMENT
+                )
+        );
     }
 
     private void cargarProductos() {
@@ -164,6 +129,7 @@ public class ReabastecimientoController {
             ProductService.replenishStock(selected.getId(), quantity);
             Cantidad.clear();
             cargarProductos();
+            ListProd.refresh();
             mostrarInformacion("Se agregaron " + quantity
                     + " unidades a " + selected.getName() + ".");
 
