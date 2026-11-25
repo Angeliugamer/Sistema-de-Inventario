@@ -23,6 +23,9 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.scene.text.TextAlignment;
+
+import javafx.geometry.Pos;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -98,14 +101,72 @@ public class HistoryController {
     private void configurarColumnas() {
         Locale localeCO = Locale.forLanguageTag("es-CO");
 
-        // La columna recibe el objeto Purchase completo.
+        // PRODUCTO
+        ColProducto.setCellValueFactory(cell ->
+                new SimpleStringProperty(
+                        cell.getValue().getProduct()
+                )
+        );
+
+        ColProducto.setCellFactory(column ->
+                crearCeldaCentrada()
+        );
+
+        // CANTIDAD
+        ColCantidad.setCellValueFactory(cell ->
+                new SimpleIntegerProperty(
+                        cell.getValue().getQuantity()
+                ).asObject()
+        );
+
+        ColCantidad.setCellFactory(column ->
+                crearCeldaCentrada()
+        );
+
+        // TOTAL
+        ColTotal.setCellValueFactory(cell ->
+                new SimpleStringProperty(
+                        String.format(
+                                localeCO,
+                                "$%,.0f",
+                                cell.getValue().getTotal()
+                        )
+                )
+        );
+
+        ColTotal.setCellFactory(column ->
+                crearCeldaCentrada()
+        );
+
+        // VENDEDOR
+        ColUsuario.setCellValueFactory(cell -> {
+            String userId = cell.getValue().getUserId();
+
+            String username = nombresUsuarios.get(userId);
+
+            if (username == null || username.isBlank()) {
+                username = "Usuario no encontrado";
+            }
+
+            return new SimpleStringProperty(username);
+        });
+
+        ColUsuario.setCellFactory(column ->
+                crearCeldaCentrada()
+        );
+
+        // FECHA Y HORA
         ColFecha.setCellValueFactory(cell ->
                 new SimpleObjectProperty<>(cell.getValue())
         );
 
-        // Personalizar la fecha para poner las barras en negrita.
         ColFecha.setCellFactory(column ->
-                new TableCell<Purchase, Purchase>() {
+                new TableCell<>() {
+
+                    {
+                        setAlignment(Pos.CENTER);
+                    }
+
                     @Override
                     protected void updateItem(Purchase purchase, boolean empty) {
                         super.updateItem(purchase, empty);
@@ -134,6 +195,7 @@ public class HistoryController {
                             Text dia = new Text(partes[2]);
                             Text hora = new Text(" - " + partes[3]);
 
+                            // Negrita solamente para las barras.
                             barra1.setStyle("-fx-font-weight: bold;");
                             barra2.setStyle("-fx-font-weight: bold;");
 
@@ -146,110 +208,40 @@ public class HistoryController {
                                     hora
                             );
 
+                            contenido.setTextAlignment(TextAlignment.CENTER);
+
                             setText(null);
                             setGraphic(contenido);
 
                         } catch (Exception e) {
+
                             setGraphic(null);
                             setText(purchase.getDate());
+
                         }
                     }
                 }
         );
+    }
 
-        ColCantidad.setCellValueFactory(cell ->
-                new SimpleIntegerProperty(
-                        cell.getValue().getQuantity()
-                ).asObject()
-        );
-
-        ColTotal.setCellValueFactory(cell ->
-                new SimpleStringProperty(
-                        String.format(
-                                localeCO,
-                                "$%,.0f",
-                                cell.getValue().getTotal()
-                        )
-                )
-        );
-
-        // Mostrar el nombre en lugar del ID.
-        ColUsuario.setCellValueFactory(cell -> {
-            String userId = cell.getValue().getUserId();
-
-            String username = nombresUsuarios.get(userId);
-
-            if (username == null || username.isBlank()) {
-                username = "Usuario no encontrado";
+    // CREAR CELDAS CON CONTENIDO CENTRADO
+    private <T> TableCell<Purchase, T> crearCeldaCentrada() {
+        return new TableCell<>() {
+            {
+                setAlignment(Pos.CENTER);
             }
 
-            return new SimpleStringProperty(username);
-        });
-
-        // La columna recibe la compra completa.
-        ColFecha.setCellValueFactory(cell ->
-                new SimpleObjectProperty<>(cell.getValue())
-        );
-
-        // Personalizar la fecha para poner las barras en negrita.
-        ColFecha.setCellFactory(column -> new TableCell<>() {
             @Override
-            protected void updateItem(Purchase purchase, boolean empty) {
-                super.updateItem(purchase, empty);
+            protected void updateItem(T item, boolean empty) {
+                super.updateItem(item, empty);
 
-                if (empty || purchase == null) {
-                    setText(null);
-                    setGraphic(null);
-                    return;
-                }
+                setText(empty || item == null
+                        ? null
+                        : item.toString());
 
-                try {
-                    LocalDateTime fecha = LocalDateTime.parse(
-                            purchase.getDate()
-                    );
-
-                    String fechaFormateada =
-                            fecha.format(FORMATO_FECHA);
-
-                    String[] partes = fechaFormateada.split(" / | - ");
-
-                    if (partes.length != 4) {
-                        setText(fechaFormateada);
-                        setGraphic(null);
-                        return;
-                    }
-
-                    Text anio = new Text(partes[0]);
-                    Text barra1 = new Text(" / ");
-                    Text mes = new Text(partes[1]);
-                    Text barra2 = new Text(" / ");
-                    Text dia = new Text(partes[2]);
-                    Text hora = new Text(" - " + partes[3]);
-
-                    // Negrita solamente para las barras.
-                    barra1.setStyle("-fx-font-weight: bold;");
-                    barra2.setStyle("-fx-font-weight: bold;");
-
-                    TextFlow contenido = new TextFlow(
-                            anio,
-                            barra1,
-                            mes,
-                            barra2,
-                            dia,
-                            hora
-                    );
-
-                    setText(null);
-                    setGraphic(contenido);
-
-                } catch (Exception e) {
-                    // Si una fecha antigua o incorrecta no puede
-                    // interpretarse, mostrar el valor original.
-                    setGraphic(null);
-                    setText(purchase.getDate());
-                }
+                setGraphic(null);
             }
-        });
+        };
     }
 
     // BUSCAR VENTAS POR FECHA

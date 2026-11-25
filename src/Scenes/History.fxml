@@ -52,16 +52,16 @@
                 </HBox>
             </VBox>
 
-             <TableView fx:id="TablaVentas" layoutX="25.0" layoutY="215.0" prefHeight="440.0">
+             <TableView fx:id="TablaVentas" layoutX="25.0" layoutY="215.0" prefWidth="1060.0" prefHeight="440.0" fixedCellSize="30.0">
                  <columns>
-                     <TableColumn fx:id="ColProducto" prefWidth="360.0" text="Producto" />
-                     <TableColumn fx:id="ColCantidad" prefWidth="140.0" text="Cantidad" />
-                     <TableColumn fx:id="ColTotal" prefWidth="220.0" text="Total" />
-                     <TableColumn fx:id="ColUsuario" prefWidth="240.0" text="Vendedor" />
-                     <TableColumn fx:id="ColFecha" prefWidth="250.0" text="Fecha / Hora" />
+                     <TableColumn fx:id="ColProducto" prefWidth="300.0" text="Producto" />
+                     <TableColumn fx:id="ColCantidad" prefWidth="100.0" text="Cantidad" />
+                     <TableColumn fx:id="ColTotal" prefWidth="160.0" text="Total" />
+                     <TableColumn fx:id="ColUsuario" prefWidth="200.0" text="Vendedor" />
+                     <TableColumn fx:id="ColFecha" prefWidth="260.0" text="Fecha / Hora" />
                  </columns>
             <columnResizePolicy>
-               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               <TableView fx:constant="UNCONSTRAINED_RESIZE_POLICY" />
             </columnResizePolicy>
              </TableView>
         </AnchorPane>
