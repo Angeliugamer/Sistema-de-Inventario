@@ -28,9 +28,16 @@ public class ProductListCell extends ListCell<Product> {
     private static final Color COLOR_NORMAL = Color.WHITE;
     private static final Color COLOR_STOCK_BAJO = Color.web("#FFF2CC");
     private static final Color COLOR_SIN_STOCK = Color.web("#F4CCCC");
+
     private static final Color COLOR_HOVER = Color.web("#D3D3D3");
     private static final Color COLOR_SELECTED = Color.web("#B4C7E7");
-    private static final Color COLOR_CARRITO = Color.LIGHTGREEN;
+    private static final Color COLOR_SELECTED_HOVER = Color.web("#C4CDDE");
+
+    private static final Color COLOR_CART = Color.web("#9BE99B");
+    private static final Color COLOR_CART_HOVER = Color.web("#B6E0B6");
+
+    private static final Color COLOR_SELECTED_CART = Color.web("#98D5CB");
+    private static final Color COLOR_SELECTED_CART_HOVER = Color.web("#B4D4CF");
 
     private final Mode mode;
     private final Map<String, Integer> carrito;
@@ -159,20 +166,30 @@ public class ProductListCell extends ListCell<Product> {
             return;
         }
 
+        boolean seleccionado = isSelected();
+        boolean enCarrito = carrito != null && carrito.getOrDefault(getItem().getId(), 0) > 0;
+        boolean mouseEncima = isHover();
+
         Color color;
 
         // El hover solo afecta mientras el puntero está encima.
-        if (isHover()) {
+        if (seleccionado && enCarrito) {
+            color = mouseEncima
+                    ? COLOR_SELECTED_CART_HOVER
+                    : COLOR_SELECTED_CART;
+
+        } else if (seleccionado) {
+            color = mouseEncima
+                    ? COLOR_SELECTED_HOVER
+                    : COLOR_SELECTED;
+
+        } else if (enCarrito) {
+            color = mouseEncima
+                    ? COLOR_CART_HOVER
+                    : COLOR_CART;
+
+        } else if (mouseEncima) {
             color = COLOR_HOVER;
-
-            // La selección se conserva al retirar el puntero.
-        } else if (isSelected()) {
-            color = COLOR_SELECTED;
-
-            // Los productos del carrito siempre tienen fondo azul claro.
-        } else if (mode == Mode.INVENTORY
-                && obtenerCantidadCarrito(producto) > 0) {
-            color = COLOR_CARRITO;
 
         } else if (producto.getStock() == 0) {
             color = COLOR_SIN_STOCK;
