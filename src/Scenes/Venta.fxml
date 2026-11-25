@@ -125,9 +125,15 @@
                   <TextField fx:id="Cantidad" promptText="Nueva cantidad" />
       
                   <Button maxWidth="Infinity" onAction="#actualizarCantidad" styleClass="boton-naranja" text="Actualizar cantidad" />
-                  <Button fx:id="Eliminar" maxWidth="Infinity" onAction="#eliminarProducto" styleClass="boton-naranja" text="Retirar producto" />
                </VBox>
             </AnchorPane>
+
+            <Button fx:id="BtnAñadir" layoutX="890.0" layoutY="400.0" prefHeight="30.0" prefWidth="155.0" mnemonicParsing="false" onAction="#añadirProducto" styleClass="boton-naranja" text="Añadir">
+               <font><Font name="Arial" size="12.0" /></font>
+            </Button>
+            <Button fx:id="BtnEliminar" layoutX="1055.0" layoutY="400.0" prefHeight="30.0" prefWidth="155.0"  mnemonicParsing="false" onAction="#eliminarProducto" styleClass="boton-naranja" text="Eliminar">
+               <font><Font name="Arial" size="12.0" /></font>
+            </Button>
 
             <Button fx:id="Continuar" layoutX="890.0" layoutY="550.0" mnemonicParsing="false" onAction="#purchase" prefHeight="40.0" prefWidth="320.0" styleClass="boton-naranja" text="Continuar" />
             <Button fx:id="Historial" layoutX="890.0" layoutY="600.0" mnemonicParsing="false" onAction="#openHistory" prefHeight="40.0" prefWidth="320.0" styleClass="boton-naranja" text="Historial de Ventas">
