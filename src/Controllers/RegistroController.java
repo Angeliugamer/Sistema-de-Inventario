@@ -14,6 +14,9 @@ import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.Priority;
+import javafx.scene.text.TextAlignment;
 
 import java.util.List;
 import java.util.Locale;
@@ -182,10 +185,16 @@ public class RegistroController {
 
         resultado.ifPresent(data -> {
             try {
-                Product actualizado = new Product(
-                        seleccionado.getId(), data.nombre(), data.categoria(),
-                        data.precio(), data.stock(), data.stockMinimo()
-                );
+                Product actualizado = new Product.Builder()
+                        .id(seleccionado.getId())
+                        .name(data.nombre())
+                        .category(data.categoria())
+                        .price(data.precio())
+                        .stock(data.stock())
+                        .stockMinimo(data.stockMinimo())
+                        .active(seleccionado.isActive())
+                        .build();
+
                 ProductService.updateProduct(actualizado);
                 cargarProductos();
                 mostrarInformacion("El producto se modificó correctamente.");

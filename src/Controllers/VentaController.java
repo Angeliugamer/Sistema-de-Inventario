@@ -1,5 +1,6 @@
 package Controllers;
 
+import Services.CalculadoraVenta;
 import Services.Session;
 import Services.ButtonSound;
 
@@ -9,6 +10,7 @@ import javafx.scene.control.Button;
 public class VentaController {
     @FXML
     private Button Historial;
+    private final CalculadoraVenta calculadoraVenta = new CalculadoraVenta();
 
     @FXML
     public void initialize() {
