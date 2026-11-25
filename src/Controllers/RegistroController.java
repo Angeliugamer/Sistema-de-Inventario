@@ -1,9 +1,12 @@
 package Controllers;
 
 import Models.Product;
+
 import Services.CategoryService;
 import Services.ProductService;
 import Services.Session;
+
+import Components.ProductListCell;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -11,9 +14,6 @@ import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.Priority;
-import javafx.scene.text.TextAlignment;
 
 import java.util.List;
 import java.util.Locale;
@@ -47,73 +47,13 @@ public class RegistroController {
     }
 
     // CONFIGURAR LA PRESENTACIÓN DE LOS PRODUCTOS.
+
     private void configurarLista() {
-        ListProd.setCellFactory(list -> new ListCell<>() {
-            private final GridPane fila = new GridPane();
-
-            private final Label nombre = new Label();
-            private final Label categoria = new Label();
-            private final Label precio = new Label();
-            private final Label stock = new Label();
-            private final Label minimo = new Label();
-
-            {
-                fila.setHgap(8);
-                fila.setVgap(0);
-
-                double[] porcentajes = {30, 18, 18, 17, 17};
-
-                for (double porcentaje : porcentajes) {
-                    ColumnConstraints columna = new ColumnConstraints();
-                    columna.setPercentWidth(porcentaje);
-                    columna.setHgrow(Priority.ALWAYS);
-                    fila.getColumnConstraints().add(columna);
-                }
-
-                configurarLabel(nombre);
-                configurarLabel(categoria);
-                configurarLabel(precio);
-                configurarLabel(stock);
-                configurarLabel(minimo);
-
-                fila.add(nombre, 0, 0);
-                fila.add(categoria, 1, 0);
-                fila.add(precio, 2, 0);
-                fila.add(stock, 3, 0);
-                fila.add(minimo, 4, 0);
-
-                setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-            }
-
-            @Override
-            protected void updateItem(Product producto, boolean empty) {
-                super.updateItem(producto, empty);
-
-                if (empty || producto == null) {
-                    setGraphic(null);
-                    setText(null);
-                    return;
-                }
-
-                nombre.setText(producto.getName());
-                categoria.setText(producto.getCategory());
-
-                precio.setText(String.format(
-                        Locale.forLanguageTag("es-CO"), "$%,.0f", producto.getPrice()
-                ));
-
-                stock.setText("Stock: " + producto.getStock());
-                minimo.setText("Mínimo: " + producto.getStockMinimo());
-
-                setGraphic(fila);
-            }
-
-            private void configurarLabel(Label label) {
-                label.setMaxWidth(Double.MAX_VALUE);
-                label.setTextAlignment(TextAlignment.LEFT);
-                label.setStyle("-fx-padding: 5 2 5 2;");
-            }
-        });
+        ListProd.setCellFactory(list ->
+                new ProductListCell(
+                        ProductListCell.Mode.REGISTRATION
+                )
+        );
 
         ListProd.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
@@ -121,6 +61,7 @@ public class RegistroController {
             }
         });
     }
+
 
 
     // CARGAR PRODUCTOS ACTIVOS.
