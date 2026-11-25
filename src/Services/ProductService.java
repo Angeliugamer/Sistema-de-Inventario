@@ -57,14 +57,14 @@ public class ProductService {
             double price, int stock, int stockMinimo) {
         requireAdmin();
 
-        Product product = new Product(
-                UUID.randomUUID().toString(),
-                name,
-                category,
-                price,
-                stock,
-                stockMinimo
-        );
+        Product product = new Product.Builder()
+                .id(UUID.randomUUID().toString())
+                .name(name)
+                .category(category)
+                .price(price)
+                .stock(stock)
+                .stockMinimo(stockMinimo)
+                .build();
 
         storage.add(product);
 
@@ -153,16 +153,15 @@ public class ProductService {
     }
 
     private static Product copy(Product product) {
-        Product copy = new Product(
-                product.getId(),
-                product.getName(),
-                product.getCategory(),
-                product.getPrice(),
-                product.getStock(),
-                product.getStockMinimo()
-        );
-        copy.setActive(product.isActive());
-        return copy;
+        return new Product.Builder()
+                .id(product.getId())
+                .name(product.getName())
+                .category(product.getCategory())
+                .price(product.getPrice())
+                .stock(product.getStock())
+                .stockMinimo(product.getStockMinimo())
+                .active(product.isActive())
+                .build();
     }
 
     // COMPROBAR PERMISOS

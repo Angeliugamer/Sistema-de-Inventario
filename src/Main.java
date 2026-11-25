@@ -1,7 +1,5 @@
 import Controllers.AppNavigator;
 // import Services.UserService;
-import Services.ButtonSound;
-
 import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -12,10 +10,10 @@ public class Main extends Application {
         // Estos son Los Comandos de las funciones
 
         // Registrar Administrador Nuevo
-        // boolean created = UserService.createAdminByCode(
-        //         "NOMBRE_ADMIN",
-        //         "CONTRASENA_ADMIN"
-        // );
+        //boolean created = UserService.createAdminByCode(
+          //     "NOMBRE_ADMIN",
+            //    "CONTRASENA_ADMIN"
+         //);
 
         // System.out.println(created
         //         ? "Administrador creado."
@@ -33,9 +31,9 @@ public class Main extends Application {
         AppNavigator.showLogin();
 
         stage.show();
-
-        ButtonSound.playStartupSound();
     }
 
-    public static void main(String[] args) {launch(args);}
+    public static void main(String[] args) {
+        launch(args);
+    }
 }
