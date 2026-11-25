@@ -1,39 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.HistoryController">
-    <VBox spacing="16.0" AnchorPane.bottomAnchor="24.0" AnchorPane.leftAnchor="32.0" AnchorPane.rightAnchor="32.0" AnchorPane.topAnchor="24.0">
-        <HBox alignment="CENTER_LEFT" spacing="16.0">
-            <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Historial de Ventas"/>
-            <HBox HBox.hgrow="ALWAYS"/>
-            <Button fx:id="Back" mnemonicParsing="false" onAction="#backToProducts" text="Inventario"/>
-            <Button fx:id="Out" mnemonicParsing="false" onAction="#logout" text="Cerrar sesión"/>
-        </HBox>
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../Styles/Botones.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.HistoryController">
+    <children>
+        <Pane prefHeight="200.0" prefWidth="200.0">
+            <children>
+                <ImageView fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true">
+                    <image><Image url="@../Shared/1%20Login/Fondo.png" /></image>
+                </ImageView>
+                <ImageView fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true">
+                    <image><Image url="@../Shared/2%20Lista%20Productos/Coso%20Astetic.png" /></image>
+                </ImageView>
+            </children>
+        </Pane>
+        <Pane prefHeight="200.0" prefWidth="200.0">
+            <children>
+                <ImageView fitHeight="56.0" fitWidth="57.0" layoutX="23.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+                    <image><Image url="@../Icons/SignOut.png" /></image>
+                    <effect><ColorAdjust brightness="1.0" /></effect>
+                </ImageView>
+                <ImageView fitHeight="60.0" fitWidth="63.0" layoutX="1108.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true">
+                    <image><Image url="@../Icons/CaretCircleLeft.png" /></image>
+                    <effect><ColorAdjust brightness="1.0" /></effect>
+                </ImageView>
+                <ImageView fitHeight="96.0" fitWidth="96.0" layoutX="1182.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
+                    <image><Image url="@../Icons/UserCircle.png" /></image>
+                    <effect><ColorAdjust brightness="1.0" /></effect>
+                </ImageView>
+            </children>
+        </Pane>
+        <AnchorPane prefHeight="720.0" prefWidth="1280.0">
+            <Button fx:id="Out" layoutX="25.0" layoutY="22.0" mnemonicParsing="false" onAction="#logout" prefHeight="56.0" prefWidth="52.0" styleClass="boton-navegacion" />
+            <Button fx:id="Back" layoutX="1108.0" layoutY="26.0" mnemonicParsing="false" onAction="#backToProducts" prefHeight="60.0" prefWidth="60.0" styleClass="boton-navegacion" />
 
-        <HBox alignment="CENTER_LEFT" spacing="12.0">
-            <Label text="Fecha:"/>
-            <DatePicker fx:id="DateFilter" onAction="#buscarPorFecha"/>
-            <Button fx:id="BtnBuscar" mnemonicParsing="false" onAction="#buscarPorFecha" text="Consultar"/>
-            <HBox HBox.hgrow="ALWAYS"/>
-            <Label fx:id="TotalDiaLabel" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Total del día: $0"/>
-        </HBox>
+            <VBox spacing="10.0" AnchorPane.bottomAnchor="24.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="32.0" AnchorPane.topAnchor="125.0">
+                <HBox alignment="CENTER_LEFT" spacing="16.0">
+                    <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Historial de Ventas" />
+                    <HBox HBox.hgrow="ALWAYS" />
+                </HBox>
 
-        <TableView fx:id="TablaVentas" VBox.vgrow="ALWAYS">
-            <columns>
-                <TableColumn fx:id="ColProducto" prefWidth="360.0" text="Producto"/>
-                <TableColumn fx:id="ColCantidad" prefWidth="140.0" text="Cantidad"/>
-                <TableColumn fx:id="ColTotal" prefWidth="220.0" text="Total"/>
-                <TableColumn fx:id="ColUsuario" prefWidth="240.0" text="Usuario ID"/>
-                <TableColumn fx:id="ColFecha" prefWidth="250.0" text="Fecha / Hora"/>
-            </columns>
-        </TableView>
-    </VBox>
-</AnchorPane>
+                <HBox alignment="CENTER_LEFT" spacing="12.0">
+                    <Label text="Fecha:" />
+                    <DatePicker fx:id="DateFilter" onAction="#buscarPorFecha" />
+                    <Button fx:id="BtnBuscar" mnemonicParsing="false" onAction="#buscarPorFecha" text="Consultar" />
+                    <HBox HBox.hgrow="ALWAYS" />
+                    <Label fx:id="TotalDiaLabel" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Total del día: $0" />
+                </HBox>
+            </VBox>
+
+             <TableView fx:id="TablaVentas" layoutX="25.0" layoutY="215.0" prefHeight="440.0">
+                 <columns>
+                     <TableColumn fx:id="ColProducto" prefWidth="360.0" text="Producto" />
+                     <TableColumn fx:id="ColCantidad" prefWidth="140.0" text="Cantidad" />
+                     <TableColumn fx:id="ColTotal" prefWidth="220.0" text="Total" />
+                     <TableColumn fx:id="ColUsuario" prefWidth="240.0" text="Usuario ID" />
+                     <TableColumn fx:id="ColFecha" prefWidth="250.0" text="Fecha / Hora" />
+                 </columns>
+             </TableView>
+        </AnchorPane>
+    </children>
+</StackPane>
