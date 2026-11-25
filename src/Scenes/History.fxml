@@ -9,15 +9,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="720.0" prefWidth="1280.0"
-            xmlns="http://javafx.com/javafx/26"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="Controllers.HistoryController">
-    <VBox spacing="16.0"
-          AnchorPane.bottomAnchor="24.0"
-          AnchorPane.leftAnchor="32.0"
-          AnchorPane.rightAnchor="32.0"
-          AnchorPane.topAnchor="24.0">
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.HistoryController">
+    <VBox spacing="16.0" AnchorPane.bottomAnchor="24.0" AnchorPane.leftAnchor="32.0" AnchorPane.rightAnchor="32.0" AnchorPane.topAnchor="24.0">
         <HBox alignment="CENTER_LEFT" spacing="16.0">
             <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Historial de Ventas"/>
             <HBox HBox.hgrow="ALWAYS"/>
@@ -30,8 +23,7 @@
             <DatePicker fx:id="DateFilter" onAction="#buscarPorFecha"/>
             <Button fx:id="BtnBuscar" mnemonicParsing="false" onAction="#buscarPorFecha" text="Consultar"/>
             <HBox HBox.hgrow="ALWAYS"/>
-            <Label fx:id="TotalDiaLabel" style="-fx-font-size: 16px; -fx-font-weight: bold;"
-                   text="Total del día: $0"/>
+            <Label fx:id="TotalDiaLabel" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Total del día: $0"/>
         </HBox>
 
         <TableView fx:id="TablaVentas" VBox.vgrow="ALWAYS">

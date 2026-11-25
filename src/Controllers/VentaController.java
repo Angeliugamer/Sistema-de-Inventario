@@ -234,7 +234,7 @@ public class VentaController {
         }
 
         try {
-            AppNavigator.showHistory();
+            AppNavigator.showHistoryFromVenta();
 
         } catch (Exception e) {
             e.printStackTrace();

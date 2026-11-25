@@ -48,6 +48,11 @@
                   <ColorAdjust brightness="1.0" />
                </effect>
             </ImageView>
+            <ImageView fitHeight="460.0" fitWidth="800.0" layoutX="50.0" layoutY="180.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Shared/3%20Venta/Espacio%20para%20la%20lista.png" />
+               </image>
+            </ImageView>
             <ImageView fitHeight="350.0" fitWidth="400.0" layoutX="865.0" layoutY="155.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../Shared/3%20Venta/No%20lo%20se%20hermano%20dimelo%20tu.png" />
@@ -94,7 +99,7 @@
                      </rowConstraints>
                   </GridPane>
       
-                  <ListView fx:id="ListaVenta" prefWidth="790.0" styleClass="lista-productos" VBox.vgrow="ALWAYS" />
+                  <ListView fx:id="ListaVenta" prefHeight="500.0" prefWidth="790.0" styleClass="lista-productos" VBox.vgrow="ALWAYS" />
                </VBox>
       
                <VBox layoutX="890.0" layoutY="175.0" prefWidth="320.0" spacing="10.0">

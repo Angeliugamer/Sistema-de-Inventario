@@ -336,6 +336,23 @@ public class ListProductController {
             mostrarError("No se pudo abrir la ventana de Registro.");
         }
     }
+    
+    @FXML
+    private void openHistory() {
+        if (!Session.isAdmin()) {
+            return;
+        }
+
+        stockAlertManager.stop();
+
+        try {
+            AppNavigator.showHistoryFromInventory();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            mostrarError("No se pudo abrir el historial de ventas.");
+        }
+    }
 
     private void mostrarAviso(String mensaje) {
         new Alert(Alert.AlertType.WARNING, mensaje).show();

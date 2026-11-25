@@ -94,7 +94,7 @@
             <Button fx:id="Regist" layoutX="1000.0" layoutY="540.0" mnemonicParsing="false" onAction="#openRegister" prefHeight="40.0" prefWidth="150.0" styleClass="boton-naranja" text="Registro">
                <font><Font name="Arial" size="14.0" /></font>
             </Button>
-            <Button fx:id="Historial" layoutX="1000.0" layoutY="600.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="150.0" styleClass="boton-naranja" text="Historial de Ventas">
+            <Button fx:id="Historial" layoutX="1000.0" layoutY="600.0" mnemonicParsing="false" onAction="#openHistory" prefHeight="40.0" prefWidth="150.0" styleClass="boton-naranja" text="Historial de Ventas">
                <font><Font name="Arial" size="14.0" /></font>
             </Button>
          </children>

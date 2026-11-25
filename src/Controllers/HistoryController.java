@@ -1,9 +1,11 @@
 package Controllers;
 
 import Models.Purchase;
+
 import Services.ButtonSound;
 import Services.PurchaseService;
 import Services.Session;
+
 import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -21,7 +23,6 @@ import java.util.List;
 import java.util.Locale;
 
 public class HistoryController {
-
     @FXML private Button Out;
     @FXML private Button Back;
     @FXML private Button BtnBuscar;
@@ -94,6 +95,7 @@ public class HistoryController {
                     "Total del día: $%,.0f",
                     sumaTotal
             ));
+
         } catch (Exception e) {
             e.printStackTrace();
             mostrarError("No se pudieron cargar las ventas de la fecha seleccionada.");
@@ -102,22 +104,27 @@ public class HistoryController {
 
     @FXML
     private void backToProducts() {
-        ButtonSound.playClick();
         try {
-            AppNavigator.showInventory();
+            ButtonSound.playClick();
+            AppNavigator.returnFromHistory();
+
         } catch (Exception e) {
             e.printStackTrace();
+            mostrarError("No se pudo regresar a la pantalla anterior.");
         }
     }
 
     @FXML
     private void logout() {
-        ButtonSound.playClick();
-        Session.logout();
         try {
+            ButtonSound.playClick();
+            Session.logout();
+
             AppNavigator.showLogin();
+
         } catch (Exception e) {
             e.printStackTrace();
+            mostrarError("No se pudo cerrar la sesión.");
         }
     }
 

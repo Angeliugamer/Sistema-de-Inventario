@@ -10,6 +10,9 @@ import java.io.IOException;
 public class AppNavigator {
     private static Stage primaryStage;
 
+    private enum HistoryOrigin {INVENTORY, SALE}
+    private static HistoryOrigin historyOrigin = HistoryOrigin.INVENTORY;
+
     public static void setStage(Stage stage) {
         primaryStage = stage;
     }
@@ -38,33 +41,53 @@ public class AppNavigator {
         loadScene("/Scenes/History.fxml", 1280, 720);
     }
 
+    // HISTORIAL ABIERTO DESDE EL INVENTARIO.
+    public static void showHistoryFromInventory() throws IOException {
+        if (!Services.Session.isAdmin()) {
+            throw new SecurityException("Solo un administrador puede consultar el historial.");
+        }
+
+        historyOrigin = HistoryOrigin.INVENTORY;
+        showHistory();
+    }
+
+    // HISTORIAL ABIERTO DESDE VENTAS.
+    public static void showHistoryFromVenta() throws IOException {
+        if (!Services.Session.isAdmin()) {
+            throw new SecurityException("Solo un administrador puede consultar el historial.");
+        }
+
+        historyOrigin = HistoryOrigin.SALE;
+        showHistory();
+    }
+
+    // REGRESAR A LA PANTALLA DESDE LA QUE SE ABRIÓ.
+    public static void returnFromHistory() throws IOException {
+        switch (historyOrigin) {
+            case INVENTORY -> showInventory();
+            case SALE -> showVenta();
+        }
+    }
+
     public static void showReabastecimiento() throws IOException {
         if (!Services.Session.isAdmin()) {
-            throw new SecurityException(
-                    "Solo un administrador puede reabastecer productos."
-            );
+            throw new SecurityException("Solo un administrador puede reabastecer productos.");
         }
         loadScene("/Scenes/Reabastecimiento.fxml", 1280, 720);
     }
 
-    private static void loadScene(
-            String path, double width, double height)
-            throws IOException {
-
-        Parent root = FXMLLoader.load(
-                AppNavigator.class.getResource(path)
-        );
-
-        primaryStage.setScene(new Scene(root, width, height));
-    }
-
     public static void showProductManagement() throws IOException {
         if (!Services.Session.isAdmin()) {
-            throw new SecurityException(
-                    "Solo un administrador puede gestionar productos."
-            );
+            throw new SecurityException("Solo un administrador puede gestionar productos.");
         }
 
         loadScene("/Scenes/Registro.fxml", 1280, 720);
+    }
+
+    private static void loadScene(String path, double width, double height)
+            throws IOException {
+        Parent root = FXMLLoader.load(AppNavigator.class.getResource(path));
+
+        primaryStage.setScene(new Scene(root, width, height));
     }
 }
